@@ -1,0 +1,151 @@
+[gd_scene load_steps=18 format=3 uid="uid://t7vd03vrhad5"]
+
+[ext_resource type="Texture2D" uid="uid://bcjtgbs5q0wjl" path="res://Adobe Express - file.png" id="1_pcljr"]
+[ext_resource type="Script" path="res://animação.gd" id="2_mpik7"]
+
+[sub_resource type="GDScript" id="GDScript_2rgyr"]
+script/source = "extends CharacterBody2D
+
+
+const SPEED = 200.0
+const JUMP_VELOCITY = -200.0
+
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
+	if direction:
+		velocity.x = direction * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e5lme"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(218, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03bby"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(436, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x4pwe"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(654, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2fsh"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(872, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eemvf"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(1090, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xp2dc"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(1308, 219, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qrb58"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(218, 0, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0sst"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(436, 0, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljtm4"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(654, 0, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qs2f6"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(872, 0, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_42so6"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(1090, 0, 218, 219)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jls1n"]
+atlas = ExtResource("1_pcljr")
+region = Rect2(1308, 0, 218, 219)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e5lme")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_03bby")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x4pwe")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2fsh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eemvf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xp2dc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qrb58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0sst")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljtm4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qs2f6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_42so6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jls1n")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c8qqh"]
+size = Vector2(13, 14.5)
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+position = Vector2(403, 152)
+script = SubResource("GDScript_2rgyr")
+
+[node name="animação" type="AnimatedSprite2D" parent="."]
+position = Vector2(-0.999998, 7.99999)
+scale = Vector2(0.225222, 0.234677)
+sprite_frames = SubResource("SpriteFrames_20pon")
+animation = &"idle"
+autoplay = "idle"
+script = ExtResource("2_mpik7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0.75)
+shape = SubResource("RectangleShape2D_c8qqh")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
