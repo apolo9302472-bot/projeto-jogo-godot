@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=35 format=3 uid="uid://t7vd03vrhad5"]
 
 [ext_resource type="Texture2D" uid="uid://c0asw3jb66i3q" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame1.png" id="1_wohq0"]
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
@@ -7,6 +7,28 @@
 [ext_resource type="Texture2D" uid="uid://w7ge33rj3vth" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame4.png" id="4_nfmp7"]
 [ext_resource type="Texture2D" uid="uid://s4tpdy5jvwf1" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame5.png" id="5_d2bo8"]
 [ext_resource type="Texture2D" uid="uid://bo5yliw8q7mk2" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame6.png" id="6_0r2pu"]
+[ext_resource type="Texture2D" uid="uid://chf2xei5q1bmr" path="res://bonecos/Characters/Hero/Sprites/Death/frame1.png" id="7_av243"]
+[ext_resource type="Texture2D" uid="uid://dr5a1wpkv3aev" path="res://bonecos/Characters/Hero/Sprites/Death/frame2.png" id="8_rlnn0"]
+[ext_resource type="Texture2D" uid="uid://if0jnwp1srmx" path="res://bonecos/Characters/Hero/Sprites/Death/frame3.png" id="9_6f6ue"]
+[ext_resource type="Texture2D" uid="uid://u46swe0dbd46" path="res://bonecos/Characters/Hero/Sprites/Death/frame4.png" id="10_jwsic"]
+[ext_resource type="Texture2D" uid="uid://50kwpbubcxfr" path="res://bonecos/Characters/Hero/Sprites/Death/frame5.png" id="11_n4yhk"]
+[ext_resource type="Texture2D" uid="uid://i5ff174ogwkk" path="res://bonecos/Characters/Hero/Sprites/Death/frame6.png" id="12_gk2qd"]
+[ext_resource type="Texture2D" uid="uid://cjwgnkv7fj7q4" path="res://bonecos/Characters/Hero/Sprites/Death/frame7.png" id="13_gjn8l"]
+[ext_resource type="Texture2D" uid="uid://ciqipoexvaosr" path="res://bonecos/Characters/Hero/Sprites/hero-hurt/hero-hurt.png" id="14_wkxuu"]
+[ext_resource type="Texture2D" uid="uid://ckcts62qu8n0j" path="res://bonecos/Characters/Hero/Sprites/hero-idle/hero-idle-1.png" id="15_edo57"]
+[ext_resource type="Texture2D" uid="uid://c75y5uqru6tyg" path="res://bonecos/Characters/Hero/Sprites/hero-idle/hero-idle-2.png" id="16_b2l4e"]
+[ext_resource type="Texture2D" uid="uid://dojruqinueygp" path="res://bonecos/Characters/Hero/Sprites/hero-idle/hero-idle-3.png" id="17_6u3f8"]
+[ext_resource type="Texture2D" uid="uid://b0wy0d5o704d0" path="res://bonecos/Characters/Hero/Sprites/hero-idle/hero-idle-4.png" id="18_pga3v"]
+[ext_resource type="Texture2D" uid="uid://rylckacrnal8" path="res://bonecos/Characters/Hero/Sprites/hero-jump/hero-jump-1.png" id="19_ry6kt"]
+[ext_resource type="Texture2D" uid="uid://6lodpofgvfax" path="res://bonecos/Characters/Hero/Sprites/hero-jump/hero-jump-2.png" id="20_f5t6b"]
+[ext_resource type="Texture2D" uid="uid://d3yai742ix2hy" path="res://bonecos/Characters/Hero/Sprites/hero-jump/hero-jump-3.png" id="21_lfy6d"]
+[ext_resource type="Texture2D" uid="uid://dcpidsah0q3ds" path="res://bonecos/Characters/Hero/Sprites/hero-jump/hero-jump-4.png" id="22_4xrqw"]
+[ext_resource type="Texture2D" uid="uid://b78n8ru42sd5o" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-1.png" id="23_ar47b"]
+[ext_resource type="Texture2D" uid="uid://bjt8w7g43gf25" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-2.png" id="24_rddp5"]
+[ext_resource type="Texture2D" uid="uid://bov6gc40u74ex" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-3.png" id="25_sba2k"]
+[ext_resource type="Texture2D" uid="uid://bpmvb21u4soyh" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-4.png" id="26_4ni0b"]
+[ext_resource type="Texture2D" uid="uid://c7cmkvqkjfq4x" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-5.png" id="27_32ghw"]
+[ext_resource type="Texture2D" uid="uid://dpmwhjmrodwvj" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-6.png" id="28_0m02k"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
@@ -38,57 +60,6 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 "
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sogua"]
-load_path = "res://.godot/imported/Adobe Express - file.png-0585501aeca412ad60c45601ea5a8ea7.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_e5lme"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(218, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_03bby"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(436, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x4pwe"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(654, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y2fsh"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(872, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eemvf"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(1090, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xp2dc"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(1308, 219, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qrb58"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(218, 0, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k0sst"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(436, 0, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ljtm4"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(654, 0, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qs2f6"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(872, 0, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_42so6"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(1090, 0, 218, 219)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jls1n"]
-atlas = SubResource("CompressedTexture2D_sogua")
-region = Rect2(1308, 0, 218, 219)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
 animations = [{
 "frames": [{
@@ -116,72 +87,127 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e5lme")
+"texture": ExtResource("7_av243")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_03bby")
+"texture": ExtResource("8_rlnn0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_x4pwe")
+"texture": ExtResource("9_6f6ue")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_y2fsh")
+"texture": ExtResource("10_jwsic")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_eemvf")
+"texture": ExtResource("11_n4yhk")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xp2dc")
+"texture": ExtResource("12_gk2qd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_gjn8l")
 }],
 "loop": true,
-"name": &"default",
-"speed": 8.0
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"enemy",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qrb58")
+"texture": ExtResource("14_wkxuu")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_edo57")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_k0sst")
+"texture": ExtResource("16_b2l4e")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ljtm4")
+"texture": ExtResource("17_6u3f8")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_qs2f6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_42so6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jls1n")
+"texture": ExtResource("18_pga3v")
 }],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_ry6kt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_f5t6b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lfy6d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_4xrqw")
+}],
 "loop": true,
-"name": &"inimigo",
+"name": &"jump",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_ar47b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_rddp5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_sba2k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_4ni0b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_32ghw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_0m02k")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 8.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c8qqh"]
 size = Vector2(13, 12)
+
+[sub_resource type="Animation" id="Animation_cedmk"]
+resource_name = "attack"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l01m2"]
+_data = {
+"attack": SubResource("Animation_cedmk")
+}
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
 
 [node name="animação" type="AnimatedSprite2D" parent="."]
-position = Vector2(-0.999998, 7.99999)
-scale = Vector2(0.225222, 0.234677)
+position = Vector2(-12, 10)
+scale = Vector2(0.368861, 0.406227)
 sprite_frames = SubResource("SpriteFrames_20pon")
-animation = &"attack"
-autoplay = "attack"
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.301432
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_c8qqh")
 
@@ -189,3 +215,6 @@ shape = SubResource("RectangleShape2D_c8qqh")
 zoom = Vector2(2, 2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l01m2")
+}
