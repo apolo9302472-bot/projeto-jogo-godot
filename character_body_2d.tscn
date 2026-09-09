@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsx8wapts71qy"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nftfw"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_nftfw")
+animation = &"idle"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]
