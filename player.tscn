@@ -1,6 +1,12 @@
-[gd_scene load_steps=18 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=24 format=3 uid="uid://t7vd03vrhad5"]
 
+[ext_resource type="Texture2D" uid="uid://c0asw3jb66i3q" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame1.png" id="1_wohq0"]
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
+[ext_resource type="Texture2D" uid="uid://dp5jnw05np81o" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame2.png" id="2_saeub"]
+[ext_resource type="Texture2D" uid="uid://cfug31egdsxu3" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame3.png" id="3_vew2w"]
+[ext_resource type="Texture2D" uid="uid://w7ge33rj3vth" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame4.png" id="4_nfmp7"]
+[ext_resource type="Texture2D" uid="uid://s4tpdy5jvwf1" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame5.png" id="5_d2bo8"]
+[ext_resource type="Texture2D" uid="uid://bo5yliw8q7mk2" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame6.png" id="6_0r2pu"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
@@ -87,6 +93,29 @@ region = Rect2(1308, 0, 218, 219)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("1_wohq0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_saeub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_vew2w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_nfmp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_d2bo8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_0r2pu")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_e5lme")
 }, {
 "duration": 1.0,
@@ -148,7 +177,8 @@ script = SubResource("GDScript_2rgyr")
 position = Vector2(-0.999998, 7.99999)
 scale = Vector2(0.225222, 0.234677)
 sprite_frames = SubResource("SpriteFrames_20pon")
-autoplay = "default"
+animation = &"attack"
+autoplay = "attack"
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -157,3 +187,5 @@ shape = SubResource("RectangleShape2D_c8qqh")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
