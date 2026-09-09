@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://upj85fw48rna"
-path="res://.godot/imported/3 - Bottom_leaf_piles.png-e73fca9a9b75cf79686cabbb1ef1567e.ctex"
+uid="uid://dpe8ftyqhsf5f"
+path="res://.godot/imported/mapaprincipal.png-6b0339315a2d13d9893f1a1197893449.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mapa/Seasonal Tilesets/Seasonal Tilesets/2 - Autumn Forest/Background parts/3 - Bottom_leaf_piles.png"
-dest_files=["res://.godot/imported/3 - Bottom_leaf_piles.png-e73fca9a9b75cf79686cabbb1ef1567e.ctex"]
+source_file="res://mapa/mapaprincipal.png"
+dest_files=["res://.godot/imported/mapaprincipal.png-6b0339315a2d13d9893f1a1197893449.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqvvgm2v5t6um"
-path="res://.godot/imported/Winter_entities (16 x 16).png-eb894f96008f72116ce32ba83344ac92.ctex"
+uid="uid://cuplrs87j7rn5"
+path="res://.godot/imported/yokai.png-7f0c8dacf9838e2d1c9e4f4519d2bfe9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mapa/Seasonal Tilesets/Seasonal Tilesets/4 - Winter World/Winter_entities (16 x 16).png"
-dest_files=["res://.godot/imported/Winter_entities (16 x 16).png-eb894f96008f72116ce32ba83344ac92.ctex"]
+source_file="res://bonecos/yokai.png"
+dest_files=["res://.godot/imported/yokai.png-7f0c8dacf9838e2d1c9e4f4519d2bfe9.ctex"]
 
 [params]
 
