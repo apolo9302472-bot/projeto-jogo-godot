@@ -1,6 +1,6 @@
 [gd_scene load_steps=18 format=3 uid="uid://t7vd03vrhad5"]
 
-[ext_resource type="Script" path="res://animação.gd" id="2_mpik7"]
+[ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
