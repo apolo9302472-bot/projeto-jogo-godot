@@ -127,6 +127,11 @@ animations = [{
 "loop": true,
 "name": &"idle",
 "speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"inimigo",
+"speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c8qqh"]
@@ -140,7 +145,7 @@ script = SubResource("GDScript_2rgyr")
 position = Vector2(-0.999998, 7.99999)
 scale = Vector2(0.225222, 0.234677)
 sprite_frames = SubResource("SpriteFrames_20pon")
-animation = &"idle"
+animation = &"inimigo"
 autoplay = "idle"
 script = ExtResource("2_mpik7")
 
