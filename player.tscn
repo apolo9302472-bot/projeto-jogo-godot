@@ -1,6 +1,5 @@
 [gd_scene load_steps=18 format=3 uid="uid://t7vd03vrhad5"]
 
-[ext_resource type="Texture2D" uid="uid://bcjtgbs5q0wjl" path="res://Adobe Express - file.png" id="1_pcljr"]
 [ext_resource type="Script" path="res://animação.gd" id="2_mpik7"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
@@ -32,52 +31,55 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 "
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sogua"]
+load_path = "res://.godot/imported/Adobe Express - file.png-0585501aeca412ad60c45601ea5a8ea7.ctex"
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_e5lme"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(218, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_03bby"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(436, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x4pwe"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(654, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_y2fsh"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(872, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eemvf"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(1090, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xp2dc"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(1308, 219, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qrb58"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(218, 0, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k0sst"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(436, 0, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ljtm4"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(654, 0, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qs2f6"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(872, 0, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_42so6"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(1090, 0, 218, 219)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jls1n"]
-atlas = ExtResource("1_pcljr")
+atlas = SubResource("CompressedTexture2D_sogua")
 region = Rect2(1308, 0, 218, 219)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
@@ -145,8 +147,7 @@ script = SubResource("GDScript_2rgyr")
 position = Vector2(-0.999998, 7.99999)
 scale = Vector2(0.225222, 0.234677)
 sprite_frames = SubResource("SpriteFrames_20pon")
-animation = &"inimigo"
-autoplay = "idle"
+autoplay = "default"
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

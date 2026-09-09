@@ -1,8 +1,6 @@
 [gd_scene load_steps=16 format=3 uid="uid://o2j37wp22kkt"]
 
-[ext_resource type="Texture2D" uid="uid://dn6qi30rygstt" path="res://mapa/Seasonal Tilesets/Seasonal Tilesets/1 - Grassland/Terrain (16 x 16).png" id="1_x6whs"]
-[ext_resource type="Texture2D" uid="uid://bgcko2chvf3cy" path="res://mapa/Seasonal Tilesets/Seasonal Tilesets/1 - Grassland/Grassland_entities (16 x 16).png" id="2_nq0gr"]
-[ext_resource type="Texture2D" uid="uid://dpe8ftyqhsf5f" path="res://mapa/Post para Instagram Adoção de Pet Cachorro Cinza Marrom Verde.png" id="3_b6qdn"]
+[ext_resource type="Texture2D" uid="uid://dpe8ftyqhsf5f" path="res://mapa/mapaprincipal.png" id="3_b6qdn"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="4_w4023"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_iuywn"]
@@ -26,8 +24,11 @@ tile_data = PackedInt32Array(0, 655362, 20, 1, 720898, 20, 2, 786434, 20)
 [sub_resource type="TileMapPattern" id="TileMapPattern_sltnp"]
 tile_data = PackedInt32Array(0, 1245186, 27, 1, 1310722, 27, 2, 1179650, 27, 3, 1245186, 27, 4, 1310722, 27)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xyo75"]
+load_path = "res://.godot/imported/Terrain (16 x 16).png-5ae56fc4da382945c9f14f284d232c2d.ctex"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x0iux"]
-texture = ExtResource("1_x6whs")
+texture = SubResource("CompressedTexture2D_xyo75")
 3:1/0 = 0
 3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:1/0 = 0
@@ -103,8 +104,11 @@ texture = ExtResource("1_x6whs")
 4:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 4:8/0/physics_layer_0/polygon_0/one_way = true
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mctdx"]
+load_path = "res://.godot/imported/Grassland_entities (16 x 16).png-ee9df71e41b92a188c3d0ab336cdb64d.ctex"
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rfebr"]
-texture = ExtResource("2_nq0gr")
+texture = SubResource("CompressedTexture2D_mctdx")
 1:1/0 = 0
 2:1/0 = 0
 3:1/0 = 0
