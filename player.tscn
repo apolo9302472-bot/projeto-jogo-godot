@@ -32,7 +32,6 @@ func _physics_process(delta: float) -> void:
 "
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sogua"]
-load_path = "res://.godot/imported/Adobe Express - file.png-0585501aeca412ad60c45601ea5a8ea7.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e5lme"]
 atlas = SubResource("CompressedTexture2D_sogua")
@@ -147,6 +146,7 @@ script = SubResource("GDScript_2rgyr")
 position = Vector2(-0.999998, 7.99999)
 scale = Vector2(0.225222, 0.234677)
 sprite_frames = SubResource("SpriteFrames_20pon")
+animation = &"idle"
 autoplay = "default"
 script = ExtResource("2_mpik7")
 
