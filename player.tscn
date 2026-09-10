@@ -203,12 +203,11 @@ scale = Vector2(0.368861, 0.406227)
 sprite_frames = SubResource("SpriteFrames_20pon")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.301432
+frame_progress = 0.525657
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(0, 10)
+position = Vector2(-11, 18)
 shape = SubResource("RectangleShape2D_c8qqh")
 
 [node name="Camera2D" type="Camera2D" parent="."]
