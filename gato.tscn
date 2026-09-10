@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://d0ghf4qn7porm"]
+
+[ext_resource type="Texture2D" uid="uid://c1b7bsae3fnxi" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-3.png" id="1_iu8rn"]
+[ext_resource type="Texture2D" uid="uid://bt41qrpxetprd" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png" id="2_dg8r7"]
+[ext_resource type="Texture2D" uid="uid://cvncx6urwkedf" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-2.png" id="3_pt5vy"]
+[ext_resource type="Texture2D" uid="uid://dqqlkqsnv6usy" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-4.png" id="4_qr86y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbo7c"]
+size = Vector2(64, 29)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vgw5"]
+atlas = ExtResource("1_iu8rn")
+region = Rect2(0, 0, 96, 53)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l3uhj"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vgw5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dg8r7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pt5vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_iu8rn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qr86y")
+}],
+"loop": true,
+"name": &"walke",
+"speed": 5.0
+}]
+
+[node name="gato" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 6.5)
+shape = SubResource("RectangleShape2D_sbo7c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -6)
+sprite_frames = SubResource("SpriteFrames_l3uhj")
+animation = &"walke"
+frame_progress = 0.862469
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]

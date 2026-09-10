@@ -1,0 +1,69 @@
+[gd_scene load_steps=12 format=3 uid="uid://ixq3wrscakg"]
+
+[ext_resource type="Texture2D" uid="uid://cvstojb8jvhlo" path="res://bonecos/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-6.png" id="1_vlvf3"]
+[ext_resource type="Texture2D" uid="uid://cvgl35ys38wpc" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png" id="2_ccmnl"]
+[ext_resource type="Texture2D" uid="uid://b2hib78qsnwga" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-2.png" id="3_s88xj"]
+[ext_resource type="Texture2D" uid="uid://cb8uvkaopy7nf" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-3.png" id="4_4i006"]
+[ext_resource type="Texture2D" uid="uid://b5s6dh5xh1k46" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-4.png" id="5_1qumx"]
+[ext_resource type="Texture2D" uid="uid://f4dypcy4swtq" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-5.png" id="6_0i7ko"]
+[ext_resource type="Texture2D" uid="uid://do30e6n03jqg" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-6.png" id="7_5wtik"]
+[ext_resource type="Texture2D" uid="uid://tmq7tc4modhh" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-7.png" id="8_yc5k3"]
+[ext_resource type="Texture2D" uid="uid://vw6iykw52igm" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-8.png" id="9_llhi7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fe5k0"]
+size = Vector2(20, 43)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0yu6a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vlvf3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ccmnl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_s88xj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4i006")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1qumx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_0i7ko")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_5wtik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_yc5k3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_llhi7")
+}],
+"loop": true,
+"name": &"walke",
+"speed": 5.0
+}]
+
+[node name="skeletooon" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 4.5)
+shape = SubResource("RectangleShape2D_fe5k0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_0yu6a")
+animation = &"idle"
+frame_progress = 0.394684
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="."]
