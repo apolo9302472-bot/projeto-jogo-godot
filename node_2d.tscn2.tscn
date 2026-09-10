@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5o85yjm8jrk8"]
+
+[ext_resource type="Texture2D" uid="uid://biv7ypaopp3og" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/graveyard.png" id="1_21b5m"]
+[ext_resource type="Texture2D" uid="uid://dsa2dd8bdvugw" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/mountains.png" id="2_vq3nt"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Graveyard" type="Sprite2D" parent="."]
+position = Vector2(771, 17)
+scale = Vector2(3.91797, 4.30285)
+texture = ExtResource("1_21b5m")
+centered = false
+
+[node name="Parallax2D" type="Parallax2D" parent="Graveyard"]
+scroll_scale = Vector2(0.5, 0.5)
+scroll_offset = Vector2(0.0638084, 7.34979)
+repeat_size = Vector2(288, 0)
+autoscroll = Vector2(-50, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="Graveyard/Parallax2D"]
+position = Vector2(-69.8704, 104.495)
+scale = Vector2(0.900133, 0.754476)
+texture = ExtResource("2_vq3nt")
