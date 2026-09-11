@@ -1,7 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://o2j37wp22kkt"]
+[gd_scene load_steps=18 format=3 uid="uid://o2j37wp22kkt"]
 
 [ext_resource type="Texture2D" uid="uid://dpe8ftyqhsf5f" path="res://mapa/mapaprincipal.png" id="3_b6qdn"]
-[ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="4_w4023"]
+[ext_resource type="Script" path="res://player.gd" id="3_f4raq"]
+[ext_resource type="PackedScene" uid="uid://d0ghf4qn7porm" path="res://gato.tscn" id="3_fms8o"]
+[ext_resource type="PackedScene" uid="uid://bwruwyidniy8y" path="res://player.tscn" id="4_w4023"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_iuywn"]
 tile_data = PackedInt32Array(0, 2621442, 44, 65536, 2621442, 45, 65537, 2686978, 45, 2, 2752514, 44, 65538, 2752514, 45, 3, 2818050, 44, 65539, 2818050, 45, 4, 2883586, 44, 65540, 2883586, 45, 5, 2949122, 44, 65541, 2949122, 45, 6, 3014658, 44, 7, 3080194, 44, 65543, 3080194, 45)
@@ -2532,3 +2534,7 @@ layer_2/tile_data = PackedInt32Array(-262142, 3670018, 26, -196606, 3670018, 27,
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("4_w4023")]
 position = Vector2(402, 150)
+script = ExtResource("3_f4raq")
+
+[node name="gato" parent="." instance=ExtResource("3_fms8o")]
+position = Vector2(673, 149)

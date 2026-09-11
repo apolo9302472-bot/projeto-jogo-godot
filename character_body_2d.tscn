@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://dsx8wapts71qy"]
 
-[ext_resource type="Script" path="res://character_body_2d.gd" id="1_v8gpy"]
+[ext_resource type="Script" path="res://enimigo/character_body_2d.gd" id="1_3x0nf"]
 [ext_resource type="Texture2D" uid="uid://dveb3pwarstrm" path="res://bonecos/Characters/Enemies/ghost/Sprites/ghost-1.png" id="2_3assm"]
 [ext_resource type="Texture2D" uid="uid://h213q5mqpcto" path="res://bonecos/Characters/Enemies/ghost/Sprites/ghost-2.png" id="3_ql7yk"]
 [ext_resource type="Texture2D" uid="uid://dqgmrh3fe4qnv" path="res://bonecos/Characters/Enemies/ghost/Sprites/ghost-3.png" id="4_okemx"]
@@ -34,7 +34,7 @@ animations = [{
 }]
 
 [node name="ghost" type="CharacterBody2D"]
-script = ExtResource("1_v8gpy")
+script = ExtResource("1_3x0nf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1.5, 2)
@@ -43,7 +43,7 @@ shape = SubResource("RectangleShape2D_hwdoc")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_nftfw")
 animation = &"idle"
-frame_progress = 0.0838548
+frame_progress = 0.510602
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 

@@ -1,35 +1,8 @@
-[gd_scene load_steps=18 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=18 format=3 uid="uid://bwruwyidniy8y"]
 
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
-script/source = "extends CharacterBody2D
-
-#teste alteração gustavinhorex
-
-const SPEED = 200.0
-const JUMP_VELOCITY = -200.0
-
-
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-
-	move_and_slide()
-"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sogua"]
 load_path = "res://.godot/imported/Adobe Express - file.png-0585501aeca412ad60c45601ea5a8ea7.ctex"
@@ -139,7 +112,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c8qqh"]
 size = Vector2(13, 12)
 
-[node name="CharacterBody2D" type="CharacterBody2D"]
+[node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
+process_thread_group = 2
+process_thread_group_order = 0
+process_thread_messages = 0
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
 
@@ -150,8 +126,8 @@ sprite_frames = SubResource("SpriteFrames_20pon")
 autoplay = "default"
 script = ExtResource("2_mpik7")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 10)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]
+position = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_c8qqh")
 
 [node name="Camera2D" type="Camera2D" parent="."]
