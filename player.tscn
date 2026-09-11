@@ -146,7 +146,6 @@ script = SubResource("GDScript_2rgyr")
 position = Vector2(-0.999998, 7.99999)
 scale = Vector2(0.225222, 0.234677)
 sprite_frames = SubResource("SpriteFrames_20pon")
-animation = &"idle"
 autoplay = "default"
 script = ExtResource("2_mpik7")
 
