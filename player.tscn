@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=36 format=3 uid="uid://t7vd03vrhad5"]
 
 [ext_resource type="Texture2D" uid="uid://c0asw3jb66i3q" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame1.png" id="1_wohq0"]
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
@@ -29,35 +29,34 @@
 [ext_resource type="Texture2D" uid="uid://bpmvb21u4soyh" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-4.png" id="26_4ni0b"]
 [ext_resource type="Texture2D" uid="uid://c7cmkvqkjfq4x" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-5.png" id="27_32ghw"]
 [ext_resource type="Texture2D" uid="uid://dpmwhjmrodwvj" path="res://bonecos/Characters/Hero/Sprites/hero-run/hero-run-6.png" id="28_0m02k"]
+[ext_resource type="Script" path="res://collision_shape_2d.gd" id="30_rhg7v"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
 
-# Configurações de movimento ajustáveis no painel Inspector
-@export var SPEED : float = 300.0
-@export var JUMP_VELOCITY : float = -400.0
+#teste alteração gustavinhorex
+
+const SPEED = 200.0
+const JUMP_VELOCITY = -200.0
+
 
 func _physics_process(delta: float) -> void:
-	# 1. Aplica a gravidade se o personagem não estiver no chão
+	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# 2. Gerencia o pulo
+	# Handle jump.
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# 3. Pega a direção do input (Esquerda / Direita)
-	# \"ui_left\" e \"ui_right\" são as setas do teclado por padrão
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	
-	# 4. Aplica a velocidade horizontal baseada na direção
-	if direction != 0:
+	if direction:
 		velocity.x = direction * SPEED
 	else:
-		# Suaviza a parada do personagem (Frenagem)
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# 5. Executa o movimento e gerencia as colisões física
 	move_and_slide()
 "
 
@@ -197,21 +196,20 @@ _data = {
 [node name="CharacterBody2D" type="CharacterBody2D"]
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
-SPEED = 200.0
-JUMP_VELOCITY = -200.0
 
 [node name="animação" type="AnimatedSprite2D" parent="."]
 position = Vector2(-4.75445, 5.14011)
 scale = Vector2(0.45943, 0.514225)
 sprite_frames = SubResource("SpriteFrames_20pon")
-animation = &"idle"
+animation = &"hurt"
 autoplay = "idle"
-frame_progress = 0.652391
+frame_progress = 0.0476635
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-3, 16)
 shape = SubResource("RectangleShape2D_c8qqh")
+script = ExtResource("30_rhg7v")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
