@@ -1,7 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://o2j37wp22kkt"]
+[gd_scene load_steps=21 format=3 uid="uid://o2j37wp22kkt"]
 
+[ext_resource type="Texture2D" uid="uid://o60u3uvss3yp" path="res://mapa/Cherry Blossom Parallax Background/Layers/00 - Sky1.png" id="3_0c25y"]
 [ext_resource type="Texture2D" uid="uid://dpe8ftyqhsf5f" path="res://mapa/mapaprincipal.png" id="3_b6qdn"]
+[ext_resource type="Texture2D" uid="uid://bs4lf3a44iqk6" path="res://mapa/Cherry Blossom Parallax Background/Layers/01 - Mountains.png" id="4_55jxc"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="4_w4023"]
+[ext_resource type="Texture2D" uid="uid://b8fa4uexgv1cr" path="res://mapa/Cherry Blossom Parallax Background/Layers/02 - Mid Trees.png" id="5_3k766"]
+[ext_resource type="Texture2D" uid="uid://thie362hg62" path="res://mapa/Cherry Blossom Parallax Background/Layers/03 - Front Trees.png" id="6_p2r1c"]
+[ext_resource type="Texture2D" uid="uid://ckh676qtywkht" path="res://mapa/04 - Foreground.png" id="7_3bege"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_iuywn"]
 tile_data = PackedInt32Array(0, 2621442, 44, 65536, 2621442, 45, 65537, 2686978, 45, 2, 2752514, 44, 65538, 2752514, 45, 3, 2818050, 44, 65539, 2818050, 45, 4, 2883586, 44, 65540, 2883586, 45, 5, 2949122, 44, 65541, 2949122, 45, 6, 3014658, 44, 7, 3080194, 44, 65543, 3080194, 45)
@@ -2520,7 +2525,7 @@ pattern_6 = SubResource("TileMapPattern_sltnp")
 position = Vector2(-1, 0)
 metadata/_edit_horizontal_guides_ = [-22.0]
 
-[node name="TileMap" type="TileMap" parent="."]
+[node name="mapa 1" type="TileMap" parent="."]
 position = Vector2(189, 179)
 tile_set = SubResource("TileSet_8pshv")
 format = 2
@@ -2531,4 +2536,61 @@ layer_2/name = "decoração cimaL"
 layer_2/tile_data = PackedInt32Array(-262142, 3670018, 26, -196606, 3670018, 27, -131070, 3670018, 28, -65534, 3670018, 29, 2, 3670018, 30, -262141, 3735554, 26, -196605, 3735554, 27, -131069, 3735554, 28, -65533, 3735554, 29, 3, 3735554, 30, -262140, 3801090, 26, -196604, 3801090, 27, -131068, 3801090, 28, -65532, 3801090, 29, 4, 3801090, 30, -262130, 3670018, 26, -196594, 3670018, 27, -131058, 3670018, 28, -65522, 3670018, 29, 14, 3670018, 30, -262129, 3735554, 26, -196593, 3735554, 27, -131057, 3735554, 28, -65521, 3735554, 29, 15, 3735554, 30, -262128, 3801090, 26, -196592, 3801090, 27, -131056, 3801090, 28, -65520, 3801090, 29, 16, 3801090, 30, -589807, 2555906, 40, -524271, 2555906, 41, -458735, 2555906, 42, -655342, 2621442, 39, -589806, 2621442, 40, -524270, 2621442, 41, -458734, 2621442, 42, -393198, 2621442, 43, -655341, 2686978, 39, -589805, 2686978, 40, -524269, 2686978, 41, -458733, 2686978, 42, -393197, 2686978, 43, -655340, 2752514, 39, -589804, 2752514, 40, -524268, 2752514, 41, -458732, 2752514, 42, -393196, 2752514, 43, -589803, 2818050, 40, -524267, 2818050, 41, -458731, 2818050, 42, -393195, 2818050, 43)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("4_w4023")]
-position = Vector2(402, 150)
+position = Vector2(396, 144)
+
+[node name="background" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="background"]
+position = Vector2(533, -132)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer"]
+position = Vector2(908, 8.00001)
+scale = Vector2(5.25833, 2.25185)
+texture = ExtResource("3_0c25y")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="background"]
+position = Vector2(-202, -329)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer2"]
+position = Vector2(1032.5, 376)
+scale = Vector2(2.71875, 1)
+texture = ExtResource("4_55jxc")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="background"]
+position = Vector2(783, -309)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer3"]
+position = Vector2(-122, 303)
+scale = Vector2(2.0125, 1.34074)
+texture = ExtResource("5_3k766")
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="background"]
+position = Vector2(-42, -620)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer4"]
+position = Vector2(570.25, 673)
+scale = Vector2(1.46562, 1.02222)
+texture = ExtResource("6_p2r1c")
+
+[node name="ParallaxLayer5" type="ParallaxLayer" parent="background"]
+position = Vector2(94, 466)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer5"]
+position = Vector2(644.5, -376)
+scale = Vector2(1.92708, 1.02222)
+texture = ExtResource("7_3bege")
+
+[node name="ParallaxLayer6" type="ParallaxLayer" parent="background"]
+position = Vector2(83, -189)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer6"]
+
+[node name="ParallaxLayer7" type="ParallaxLayer" parent="background"]
+position = Vector2(118, 144)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer7"]
+
+[node name="ParallaxLayer8" type="ParallaxLayer" parent="background"]
+position = Vector2(21, 227)
+
+[node name="Sprite2D" type="Sprite2D" parent="background/ParallaxLayer8"]
