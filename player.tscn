@@ -167,9 +167,6 @@ _data = {
 }
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
-process_thread_group = 2
-process_thread_group_order = 0
-process_thread_messages = 0
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
 
