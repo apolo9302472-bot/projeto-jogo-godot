@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsl81h6lxw2qn"]
+
+[ext_resource type="PackedScene" uid="uid://d0ghf4qn7porm" path="res://gato.tscn" id="1_wh53r"]
+[ext_resource type="PackedScene" uid="uid://bwruwyidniy8y" path="res://player.tscn" id="2_0kh7d"]
+
+[node name="mundo" type="Node2D"]
+
+[node name="gato" parent="." instance=ExtResource("1_wh53r")]
+position = Vector2(467, 163)
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("2_0kh7d")]
