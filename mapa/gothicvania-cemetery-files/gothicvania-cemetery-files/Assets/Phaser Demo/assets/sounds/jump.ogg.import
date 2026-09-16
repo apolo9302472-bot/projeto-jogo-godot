@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ctnvh2ypai4j5"
+path="res://.godot/imported/jump.ogg-ba715dcf16e5b4a975e14cdb074edc6c.oggvorbisstr"
+
+[deps]
+
+source_file="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Phaser Demo/assets/sounds/jump.ogg"
+dest_files=["res://.godot/imported/jump.ogg-ba715dcf16e5b4a975e14cdb074edc6c.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
