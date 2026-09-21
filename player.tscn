@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=37 format=3 uid="uid://t7vd03vrhad5"]
 
 [ext_resource type="Texture2D" uid="uid://c0asw3jb66i3q" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame1.png" id="1_wohq0"]
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
@@ -34,30 +34,72 @@
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
 
-#teste alteração gustavinhorex
+@onready var attack: Area2D = $attack
+@onready var animated_sprite: AnimatedSprite2D = $animação
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -200.0
 
+var isAttacking = false
+
+
+func _ready() -> void:
+	attack.monitoring = false
+	animated_sprite.play(\"idle\")
+
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+	# Gravidade
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Handle jump.
+	# Pulo
 	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	if direction:
+	# Ataque
+	if Input.is_action_just_pressed(\"MouseATK\") and not isAttacking:
+		isAttacking = true
+		attack.monitoring = true
+		animated_sprite.play(\"attack\")
+
+	# Movimento
+	var direction := Input.get_axis(\"move_left\", \"move_right\")
+
+	if direction and not isAttacking:
 		velocity.x = direction * SPEED
+
+		# Animação de andar
+		animated_sprite.play(\"walk\")
+
+		# Virar o personagem
+		if direction < 0:
+			animated_sprite.flip_h = true
+		elif direction > 0:
+			animated_sprite.flip_h = false
+
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
+		# Se não estiver atacando, fica parado
+		if not isAttacking:
+			animated_sprite.play(\"idle\")
+
 	move_and_slide()
+
+
+func _on_attack_body_entered(body: Node2D) -> void:
+	if body.has_method(\"take_damage\"):
+		body.take_damage(10)
+
+
+func _on_animação_animation_finished() -> void:
+	if animated_sprite.animation == \"attack\":
+		isAttacking = false
+		attack.monitoring = false
+
+		# Depois do ataque, volta para idle
+		animated_sprite.play(\"idle\")
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
@@ -67,13 +109,13 @@ animations = [{
 "texture": ExtResource("1_wohq0")
 }, {
 "duration": 1.0,
+"texture": ExtResource("4_nfmp7")
+}, {
+"duration": 1.0,
 "texture": ExtResource("2_saeub")
 }, {
 "duration": 1.0,
 "texture": ExtResource("3_vew2w")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_nfmp7")
 }, {
 "duration": 1.0,
 "texture": ExtResource("5_d2bo8")
@@ -81,7 +123,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("6_0r2pu")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
 "speed": 5.0
 }, {
@@ -193,6 +235,9 @@ _data = {
 "attack": SubResource("Animation_wr06f")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tyoqd"]
+size = Vector2(14, 4)
+
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
@@ -203,7 +248,7 @@ scale = Vector2(0.45943, 0.514225)
 sprite_frames = SubResource("SpriteFrames_20pon")
 animation = &"attack"
 autoplay = "idle"
-frame_progress = 0.27815
+frame = 1
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]
@@ -222,3 +267,8 @@ libraries = {
 [node name="attack" type="Area2D" parent="."]
 
 [node name="collision" type="CollisionShape2D" parent="attack"]
+position = Vector2(10, 14)
+shape = SubResource("RectangleShape2D_tyoqd")
+
+[connection signal="animation_finished" from="animação" to="." method="_on_animação_animation_finished"]
+[connection signal="body_entered" from="attack" to="." method="_on_attack_body_entered"]
