@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=4 uid="uid://bsl81h6lxw2qn"]
+[gd_scene load_steps=8 format=4 uid="uid://bsl81h6lxw2qn"]
 
 [ext_resource type="PackedScene" uid="uid://d0ghf4qn7porm" path="res://gato.tscn" id="1_wh53r"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="2_0kh7d"]
 [ext_resource type="Texture2D" uid="uid://cw24xmthfbtyl" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/tileset-sliced.png" id="3_rpn2g"]
+[ext_resource type="PackedScene" uid="uid://ixq3wrscakg" path="res://skeletooon.tscn" id="4_aicih"]
+[ext_resource type="PackedScene" uid="uid://dsx8wapts71qy" path="res://character_body_2d.tscn" id="5_u1hac"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3p46f"]
 texture = ExtResource("3_rpn2g")
@@ -118,3 +120,9 @@ position = Vector2(467, 163)
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 tile_map_data = PackedByteArray("AAAXAAoAAAAEAAMAAAAXAAsAAAAEAAQAAAAXAAwAAAAEAAUAAAAYAAoAAAAFAAMAAAAYAAsAAAAFAAQAAAAYAAwAAAAFAAUAAAAZAAoAAAAGAAMAAAAZAAsAAAAGAAQAAAAZAAwAAAAGAAUAAAAaAAoAAAAHAAMAAAAaAAsAAAAHAAQAAAAaAAwAAAAHAAUAAAATAAoAAAAEAAMAAAATAAsAAAAEAAQAAAATAAwAAAAEAAUAAAAUAAoAAAAFAAMAAAAUAAsAAAAFAAQAAAAUAAwAAAAFAAUAAAAVAAoAAAAGAAMAAAAVAAsAAAAGAAQAAAAVAAwAAAAGAAUAAAAWAAoAAAAHAAMAAAAWAAsAAAAHAAQAAAAWAAwAAAAHAAUAAAAPAAoAAAAEAAMAAAAPAAsAAAAEAAQAAAAPAAwAAAAEAAUAAAAQAAoAAAAFAAMAAAAQAAsAAAAFAAQAAAAQAAwAAAAFAAUAAAARAAoAAAAGAAMAAAARAAsAAAAGAAQAAAARAAwAAAAGAAUAAAASAAoAAAAHAAMAAAASAAsAAAAHAAQAAAASAAwAAAAHAAUAAAAbAAoAAAAEAAMAAAAbAAsAAAAEAAQAAAAbAAwAAAAEAAUAAAAcAAoAAAAFAAMAAAAcAAsAAAAFAAQAAAAcAAwAAAAFAAUAAAAdAAoAAAAGAAMAAAAdAAsAAAAGAAQAAAAdAAwAAAAGAAUAAAAeAAoAAAAHAAMAAAAeAAsAAAAHAAQAAAAeAAwAAAAHAAUAAAAfAAoAAAAEAAMAAAAfAAsAAAAEAAQAAAAfAAwAAAAEAAUAAAAgAAoAAAAFAAMAAAAgAAsAAAAFAAQAAAAgAAwAAAAFAAUAAAAhAAoAAAAGAAMAAAAhAAsAAAAGAAQAAAAhAAwAAAAGAAUAAAAiAAoAAAAHAAMAAAAiAAsAAAAHAAQAAAAiAAwAAAAHAAUAAAA=")
 tile_set = SubResource("TileSet_ujx00")
+
+[node name="skeletooon" parent="." instance=ExtResource("4_aicih")]
+position = Vector2(540, 147)
+
+[node name="ghost" parent="." instance=ExtResource("5_u1hac")]
+position = Vector2(497, 102)
