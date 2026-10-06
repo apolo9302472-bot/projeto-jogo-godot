@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://dsx8wapts71qy"]
+[gd_scene load_steps=11 format=3 uid="uid://dsx8wapts71qy"]
 
 [ext_resource type="Script" path="res://enimigo/character_body_2d.gd" id="1_3x0nf"]
 [ext_resource type="Texture2D" uid="uid://dveb3pwarstrm" path="res://bonecos/Characters/Enemies/ghost/Sprites/ghost-1.png" id="2_3assm"]
@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://kwrqt5pqwyi2" path="res://bonecos/Characters/Enemies/ghost/Sprites/ghost-4.png" id="5_0j0u8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hwdoc"]
-size = Vector2(23, 38)
+size = Vector2(14, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wcimb"]
 atlas = ExtResource("2_3assm")
@@ -33,19 +33,32 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_5cedo"]
+resource_name = "new_animation"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ecrm0"]
+_data = {
+"new_animation": SubResource("Animation_5cedo")
+}
+
 [node name="ghost" type="CharacterBody2D"]
 script = ExtResource("1_3x0nf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-1.5, 2)
+position = Vector2(-4, 5)
 shape = SubResource("RectangleShape2D_hwdoc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -5)
 sprite_frames = SubResource("SpriteFrames_nftfw")
 animation = &"idle"
+autoplay = "idle"
 frame_progress = 0.510602
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2(-2, 1)
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ecrm0")
+}
+autoplay = "new_animation"
