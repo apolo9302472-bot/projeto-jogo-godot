@@ -1,25 +1,56 @@
 extends CharacterBody2D
 
+@export var speed: float = 100.0
+@export var attack_distance: float = 30.0
+@export var attack_cooldown: float = 1.0
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+var player: Node2D
+var can_attack: bool = true
 
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+func _ready() -> void:
+	player = get_tree().get_first_node_in_group("Player")
 
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+func _physics_process(_delta: float) -> void:
+	if player == null:
+		return
 
+	# ==============================
+	# MOVIMENTO ATÉ O PLAYER
+	# ==============================
+	var direction = global_position.direction_to(player.global_position)
+	velocity = direction * speed
 	move_and_slide()
+
+	# ==============================
+	# ATAQUE AO CHEGAR PERTO
+	# ==============================
+	if global_position.distance_to(player.global_position) <= attack_distance:
+		attack_player()
+
+
+# ==========================================
+# ATAQUE DO INIMIGO
+# ==========================================
+func attack_player() -> void:
+	if not can_attack:
+		return
+
+	can_attack = false
+
+	if player.has_method("take_damage"):
+		player.take_damage(global_position)
+
+	await get_tree().create_timer(attack_cooldown).timeout
+	can_attack = true
+
+
+# ==========================================
+# RECEBER ATAQUE (TOMAR DANO)
+# ==========================================
+func take_damage(_attacker_position: Vector2 = Vector2.ZERO) -> void:
+	print("Inimigo foi atingido!")
+
+	# Remove o inimigo da cena
+	queue_free()
