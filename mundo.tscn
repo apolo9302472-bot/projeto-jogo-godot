@@ -114,6 +114,9 @@ sources/0 = SubResource("TileSetAtlasSource_3p46f")
 
 [node name="gato" parent="." instance=ExtResource("1_wh53r")]
 position = Vector2(467, 163)
+speed = 100.0
+attack_distance = 30.0
+attack_cooldown = 1.0
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_0kh7d")]
 
