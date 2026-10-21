@@ -90,6 +90,7 @@ position = Vector2(13, -7)
 sprite_frames = SubResource("SpriteFrames_l3uhj")
 animation = &"walke"
 autoplay = "walke"
+frame_progress = 0.813281
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 

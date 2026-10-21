@@ -7,10 +7,7 @@ extends CharacterBody2D
 
 var player: Node2D
 var can_attack: bool = true
-
-
 func _ready() -> void:
-
 	player = get_tree().get_first_node_in_group("Player")
 
 
@@ -19,11 +16,7 @@ func _physics_process(_delta: float) -> void:
 	if player == null:
 		return
 
-
-	# ==============================
-	# MOVIMENTO ATÉ O PLAYER
-	# ==============================
-
+# Persegue o jogador
 	var direction = global_position.direction_to(
 		player.global_position
 	)
@@ -38,13 +31,10 @@ extends CharacterBody2D
 var player: Node2D
 var can_attack: bool = true
 
-
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player")
 
-
 func _physics_process(_delta: float) -> void:
-
 	if player == null:
 		return
 
@@ -93,19 +83,15 @@ func take_damage(_attacker_position: Vector2 = Vector2.ZERO) -> void:
 
 	# Remove o inimigo da cena
 	queue_free()
-	move_and_slide()
+# ==============================
+# ATAQUE
+# ==============================
 
+if global_position.distance_to(
+	player.global_position
+) <= attack_distance:
 
-	# ==============================
-	# ATAQUE
-	# ==============================
-
-	if global_position.distance_to(
-		player.global_position
-	) <= attack_distance:
-
-		attack_player()
-
+	attack_player()
 
 func attack_player() -> void:
 
@@ -113,7 +99,6 @@ func attack_player() -> void:
 		return
 
 	can_attack = false
-
 
 	# ==============================
 	# CAUSAR DANO
@@ -125,7 +110,6 @@ func attack_player() -> void:
 			global_position
 		)
 
-
 	# ==============================
 	# COOLDOWN
 	# ==============================
@@ -135,4 +119,3 @@ func attack_player() -> void:
 	).timeout
 
 	can_attack = true
-	

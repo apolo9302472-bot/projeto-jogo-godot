@@ -124,6 +124,5 @@ position = Vector2(540, 147)
 
 [node name="ghost" parent="." instance=ExtResource("5_u1hac")]
 position = Vector2(497, 102)
-
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_0kh7d")]
 position = Vector2(321, 149)
