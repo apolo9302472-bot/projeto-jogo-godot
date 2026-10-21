@@ -154,12 +154,6 @@ func _physics_process(delta: float) -> void:
 
 func take_damage(attacker_position: Vector2 = Vector2.ZERO) -> void:
 
-	# Já morreu?
-	if isDead:
-		return
-
-	print(\"PLAYER LEVOU UM HIT!\")
-
 	# ==============================
 	# KNOCKBACK
 	# ==============================
@@ -236,7 +230,6 @@ func _on_animação_animation_finished() -> void:
 
 		velocity = Vector2.ZERO
 
-		# Se quiser remover o personagem:
 		# queue_free()
 "
 
