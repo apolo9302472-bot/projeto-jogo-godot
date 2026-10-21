@@ -1,6 +1,5 @@
 extends CharacterBody2D
 
-@export var speed: float = 100.0
 
 @export var speed: float = 100.0
 @export var attack_distance: float = 30.0
@@ -9,22 +8,53 @@ extends CharacterBody2D
 var player: Node2D
 var can_attack: bool = true
 
-func _ready():
+
+func _ready() -> void:
+
 	player = get_tree().get_first_node_in_group("Player")
-	print("PLAYER ENCONTRADO: ", player)
+
+
+func _physics_process(_delta: float) -> void:
+
+	if player == null:
+		return
+
+
+	# ==============================
+	# MOVIMENTO ATÉ O PLAYER
+	# ==============================
+
+	var direction = global_position.direction_to(
+		player.global_position
+	)
+
+	velocity = direction * speed
+extends CharacterBody2D
+
+@export var speed: float = 100.0
+@export var attack_distance: float = 30.0
+@export var attack_cooldown: float = 1.0
+
+var player: Node2D
+var can_attack: bool = true
+
 
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player")
 
+
 func _physics_process(_delta: float) -> void:
+
 	if player == null:
 		return
 
-	var direction = global_position.direction_to(player.global_position)
+	# Persegue o jogador
+	var direction = global_position.direction_to(
+		player.global_position
+	)
+
 	velocity = direction * speed
 
-	var direction = global_position.direction_to(player.global_position)
-	velocity = direction * speed
 	move_and_slide()
 
 	# Ataca quando chega perto
