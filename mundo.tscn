@@ -126,6 +126,12 @@ tile_set = SubResource("TileSet_ujx00")
 
 [node name="skeletooon" parent="." instance=ExtResource("4_aicih")]
 position = Vector2(540, 147)
+speed = 100.0
+attack_distance = 30.0
+attack_cooldown = 1.0
 
 [node name="ghost" parent="." instance=ExtResource("5_u1hac")]
 position = Vector2(497, 102)
+speed = 100.0
+attack_distance = 30.0
+attack_cooldown = 1.0
