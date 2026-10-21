@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://ixq3wrscakg"]
+[gd_scene load_steps=20 format=3 uid="uid://ixq3wrscakg"]
 
 [ext_resource type="Script" path="res://skeletooon.gd" id="1_iai5m"]
 [ext_resource type="Texture2D" uid="uid://cvstojb8jvhlo" path="res://bonecos/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-6.png" id="1_vlvf3"]
@@ -82,13 +82,9 @@ animations = [{
 [sub_resource type="Animation" id="Animation_r72b2"]
 resource_name = "new_animation"
 
-[sub_resource type="Animation" id="Animation_q5nj8"]
-resource_name = "new_animation_2"
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_c7una"]
 _data = {
-"new_animation": SubResource("Animation_r72b2"),
-"new_animation_2": SubResource("Animation_q5nj8")
+"new_animation": SubResource("Animation_r72b2")
 }
 
 [node name="skeletooon" type="CharacterBody2D"]
@@ -105,7 +101,7 @@ shape = SubResource("RectangleShape2D_fe5k0")
 sprite_frames = SubResource("SpriteFrames_0yu6a")
 animation = &"walke"
 autoplay = "walke"
-frame_progress = 0.961999
+frame_progress = 0.367098
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
