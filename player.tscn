@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://t7vd03vrhad5"]
+[gd_scene load_steps=37 format=3 uid="uid://t7vd03vrhad5"]
 
 [ext_resource type="Texture2D" uid="uid://c0asw3jb66i3q" path="res://bonecos/Characters/Hero/Sprites/hero-attack/frame1.png" id="1_wohq0"]
 [ext_resource type="Script" path="res://mapa/animação.gd" id="2_mpik7"]
@@ -34,30 +34,203 @@
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
 script/source = "extends CharacterBody2D
 
-#teste alteração gustavinhorex
+@onready var attack: Area2D = $Area2D
+@onready var animated_sprite: AnimatedSprite2D = $animação
 
 const SPEED = 200.0
 const JUMP_VELOCITY = -200.0
 
+const KNOCKBACK_FORCE = 300.0
+
+var isAttacking = false
+var isDead = false
+
+var knockback_velocity = Vector2.ZERO
+
+
+func _ready() -> void:
+
+	attack.monitoring = false
+
+	animated_sprite.play(\"idle\")
+
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
+
+	# Se morreu, não faz mais nada
+	if isDead:
+		return
+
+
+	# ==============================
+	# GRAVIDADE
+	# ==============================
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	# Handle jump.
-	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis(\"ui_left\", \"ui_right\")
-	if direction:
-		velocity.x = direction * SPEED
+	# ==============================
+	# KNOCKBACK
+	# ==============================
+
+	if knockback_velocity.length() > 0:
+
+		velocity = knockback_velocity
+
+		knockback_velocity = knockback_velocity.move_toward(
+			Vector2.ZERO,
+			1000.0 * delta
+		)
+
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+
+		# ==============================
+		# PULO
+		# ==============================
+
+		if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+			velocity.y = JUMP_VELOCITY
+
+
+		# ==============================
+		# ATAQUE
+		# ==============================
+
+		if Input.is_action_just_pressed(\"MouseATK\") and not isAttacking:
+
+			isAttacking = true
+
+			attack.monitoring = true
+
+			animated_sprite.play(\"attack\")
+
+
+		# ==============================
+		# MOVIMENTO
+		# ==============================
+
+		var direction := Input.get_axis(
+			\"move_left\",
+			\"move_right\"
+		)
+
+
+		if direction and not isAttacking:
+
+			velocity.x = direction * SPEED
+
+			animated_sprite.play(\"walk\")
+
+
+			# Virar personagem
+
+			if direction < 0:
+				animated_sprite.flip_h = true
+
+			elif direction > 0:
+				animated_sprite.flip_h = false
+
+
+		else:
+
+			velocity.x = move_toward(
+				velocity.x,
+				0,
+				SPEED
+			)
+
+
+			if not isAttacking:
+				animated_sprite.play(\"idle\")
+
 
 	move_and_slide()
+
+
+# ==================================================
+# RECEBER DANO
+# ==================================================
+
+func take_damage(attacker_position: Vector2 = Vector2.ZERO) -> void:
+
+	# ==============================
+	# KNOCKBACK
+	# ==============================
+
+	if attacker_position != Vector2.ZERO:
+
+		var direction = global_position - attacker_position
+
+		direction = direction.normalized()
+
+		knockback_velocity = direction * KNOCKBACK_FORCE
+
+
+	# ==============================
+	# MORTE
+	# ==============================
+
+	die()
+
+
+# ==================================================
+# MORTE
+# ==================================================
+
+func die() -> void:
+
+	if isDead:
+		return
+
+	isDead = true
+
+	isAttacking = false
+
+	attack.monitoring = false
+
+	velocity = Vector2.ZERO
+
+	animated_sprite.play(\"death\")
+
+
+# ==================================================
+# ATAQUE DO PLAYER
+# ==================================================
+
+func _on_attack_body_entered(body: Node2D) -> void:
+
+	if body.has_method(\"take_damage\"):
+
+		body.take_damage(
+			global_position
+		)
+
+
+# ==================================================
+# FINAL DAS ANIMAÇÕES
+# ==================================================
+
+func _on_animação_animation_finished() -> void:
+
+	# ATAQUE TERMINOU
+
+	if animated_sprite.animation == \"attack\":
+
+		isAttacking = false
+
+		attack.monitoring = false
+
+		animated_sprite.play(\"idle\")
+
+
+	# MORTE TERMINOU
+
+	elif animated_sprite.animation == \"death\":
+
+		velocity = Vector2.ZERO
+
+		# queue_free()
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
@@ -193,6 +366,9 @@ _data = {
 "attack": SubResource("Animation_cedmk")
 }
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6lod2"]
+size = Vector2(17, 5)
+
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(403, 152)
 script = SubResource("GDScript_2rgyr")
@@ -218,3 +394,9 @@ zoom = Vector2(2, 2)
 libraries = {
 "": SubResource("AnimationLibrary_l01m2")
 }
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(11.5, 14)
+shape = SubResource("RectangleShape2D_6lod2")
