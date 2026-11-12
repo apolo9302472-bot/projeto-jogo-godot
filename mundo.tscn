@@ -1,6 +1,7 @@
 [gd_scene load_steps=14 format=4 uid="uid://bsl81h6lxw2qn"]
 
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="2_0kh7d"]
+[ext_resource type="Texture2D" uid="uid://dsa2dd8bdvugw" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/mountains.png" id="2_7cxwg"]
 [ext_resource type="Texture2D" uid="uid://cw24xmthfbtyl" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/tileset-sliced.png" id="3_rpn2g"]
 [ext_resource type="Texture2D" uid="uid://llwqd32ibuyt" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/objects.png" id="3_ywitr"]
 [ext_resource type="Texture2D" uid="uid://biv7ypaopp3og" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/graveyard.png" id="4_pjml8"]
@@ -1476,6 +1477,7 @@ sources/1 = SubResource("TileSetAtlasSource_srsq1")
 sources/2 = SubResource("TileSetAtlasSource_2iqvi")
 
 [node name="mundo" type="Node2D"]
+position = Vector2(-7, 7)
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("2_0kh7d")]
 position = Vector2(-11, -2)

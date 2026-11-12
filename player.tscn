@@ -194,11 +194,11 @@ _data = {
 }
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
-position = Vector2(403, 152)
+position = Vector2(404, 141)
 script = SubResource("GDScript_2rgyr")
 
 [node name="animação" type="AnimatedSprite2D" parent="."]
-position = Vector2(-4.75445, 5.14011)
+position = Vector2(-3.99999, -5)
 scale = Vector2(0.45943, 0.514225)
 sprite_frames = SubResource("SpriteFrames_20pon")
 animation = &"idle"
@@ -207,7 +207,7 @@ frame_progress = 0.0476635
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]
-position = Vector2(-3, 16)
+position = Vector2(-4, 0)
 shape = SubResource("RectangleShape2D_c8qqh")
 script = ExtResource("30_rhg7v")
 
