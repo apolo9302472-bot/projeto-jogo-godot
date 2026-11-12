@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c5o85yjm8jrk8"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="distantBG" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2(0, 3.8147e-06)
+scale = Vector2(1, 1)
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+scale = Vector2(3.91797, 4.30285)
+scroll_scale = Vector2(0.5, 0.5)
+scroll_offset = Vector2(0.0638084, 7.34979)
+repeat_size = Vector2(288, 0)
+autoscroll = Vector2(-50, 0)
