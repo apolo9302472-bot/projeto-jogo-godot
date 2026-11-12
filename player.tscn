@@ -35,7 +35,6 @@
 script/source = "
 extends CharacterBody2D
 
-<<<<<<< Updated upstream
 @onready var attack: Area2D = $Area2D
 @onready var animated_sprite: AnimatedSprite2D = $animação
 
@@ -54,14 +53,6 @@ func _ready() -> void:
 	attack.monitoring = false
 	attack.body_entered.connect(_on_attack_body_entered)
 	animated_sprite.play(\"idle\")
-=======
-# ==========================================
-# CONFIGURAÇÕES DO PERSONAGEM
-# ==========================================
-
-@export var speed: float = 250.0
-@export var jump_velocity: float = -400.0
->>>>>>> Stashed changes
 
 # Sistema de vida
 @export var max_health: int = 3
@@ -135,23 +126,13 @@ func _ready() -> void:
 # ==========================================
 
 func _physics_process(delta: float) -> void:
-<<<<<<< Updated upstream
 	if isDead:
 		return
 
 	# GRAVIDADE
-=======
-
-	# Impede ações após a morte
-	if is_dead:
-		return
-
-	# Aplica a gravidade
->>>>>>> Stashed changes
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-<<<<<<< Updated upstream
 	# KNOCKBACK
 	if knockback_velocity.length() > 0:
 		velocity = knockback_velocity
@@ -187,56 +168,6 @@ func _physics_process(delta: float) -> void:
 
 			if not isAttacking:
 				animated_sprite.play(\"idle\")
-=======
-	# Movimentação com A e D
-	var direction := Input.get_axis(
-		\"move_left\",
-		\"move_right\"
-	)
-
-	# Atualiza a direção do personagem
-	if direction != 0:
-
-		facing_direction = signf(direction)
-
-		# Inverte o personagem
-		animated_sprite.flip_h = facing_direction < 0
-
-		# Inverte a área de ataque
-		attack_area.position.x = (
-			absf(attack_area.position.x) * facing_direction
-		)
-
-	# Pulo com espaço
-	if Input.is_action_just_pressed(\"jump\") and is_on_floor():
-
-		velocity.y = jump_velocity
-
-	# Ataque com botão esquerdo do mouse
-	if Input.is_action_just_pressed(\"attack\"):
-
-		_try_attack()
-
-	# Controla o tempo de recarga do ataque
-	if cooldown_time_left > 0.0:
-
-		cooldown_time_left = maxf(
-			cooldown_time_left - delta,
-			0.0
-		)
-
-	# Controla o empurrão recebido
-	if knockback_time_left > 0.0:
-
-		velocity.x = knockback_velocity.x
-
-		knockback_time_left = maxf(
-			knockback_time_left - delta,
-			0.0
-		)
-
-	else:
->>>>>>> Stashed changes
 
 		# Movimentação normal
 		velocity.x = direction * speed
@@ -244,7 +175,6 @@ func _physics_process(delta: float) -> void:
 	# Executa a movimentação
 	move_and_slide()
 
-<<<<<<< Updated upstream
 
 # RECEBER DANO
 func take_damage(amount: int = 1, attacker_position: Vector2 = Vector2.ZERO) -> void:
@@ -291,173 +221,6 @@ func _on_animação_animation_finished() -> void:
 	elif animated_sprite.animation == \"death\":
 		velocity = Vector2.ZERO
 		# queue_free()
-=======
-	# Atualiza as animações
-	_update_animation(direction)
-
-
-# ==========================================
-# CONTROLE DAS ANIMAÇÕES
-# ==========================================
-
-func _update_animation(direction: float) -> void:
-
-	if is_dead:
-		return
-
-	# Prioridade 1: Ataque
-	if is_attacking:
-
-		if animated_sprite.animation != \"attack\":
-			animated_sprite.play(\"attack\")
-
-		return
-
-	# Prioridade 2: Pulo
-	if not is_on_floor():
-
-		if animated_sprite.animation != \"jump\":
-			animated_sprite.play(\"jump\")
-
-		return
-
-	# Prioridade 3: Andar
-	if direction != 0:
-
-		if animated_sprite.animation != \"walk\" or not animated_sprite.is_playing():
-
-			animated_sprite.play(\"walk\")
-
-		return
-
-	# Personagem parado
-	if animated_sprite.animation != \"walk\":
-
-		animated_sprite.play(\"walk\")
-		animated_sprite.stop()
-		animated_sprite.frame = 0
-
-	elif animated_sprite.is_playing():
-
-		animated_sprite.stop()
-		animated_sprite.frame = 0
-
-
-# ==========================================
-# SISTEMA DE ATAQUE
-# ==========================================
-
-func _try_attack() -> void:
-
-	if is_attacking or cooldown_time_left > 0.0:
-		return
-
-	is_attacking = true
-
-	cooldown_time_left = attack_cooldown
-
-	# Ativa a área de colisão
-	attack_area.monitoring = true
-
-	# Executa a animação
-	animated_sprite.play(\"attack\")
-
-
-# ==========================================
-# FINALIZAÇÃO DAS ANIMAÇÕES
-# ==========================================
-
-func _on_animation_finished() -> void:
-
-	if is_dead:
-		return
-
-	# Verifica se o ataque terminou
-	if animated_sprite.animation == \"attack\":
-
-		is_attacking = false
-
-		# Desativa a área de ataque
-		attack_area.monitoring = false
-
-
-# ==========================================
-# DETECÇÃO DE INIMIGOS
-# ==========================================
-
-func _on_attack_area_body_entered(body: Node2D) -> void:
-
-	if body != self and body.has_method(\"take_damage\"):
-
-		body.take_damage(1)
-
-
-# ==========================================
-# SISTEMA DE DANO RECEBIDO
-# ==========================================
-
-func take_damage(enemy_direction: Vector2) -> void:
-
-	if is_dead:
-		return
-
-	# Reduz a vida
-	health -= 1
-
-	print(\"Vida do personagem: \", health)
-
-	# Normaliza a direção recebida do inimigo
-	var direction: Vector2 = enemy_direction.normalized()
-
-	# Evita vetor nulo
-	if direction == Vector2.ZERO:
-
-		direction = Vector2(-facing_direction, 0.0)
-
-	# Calcula a força do empurrão
-	knockback_velocity = direction * knockback_force
-
-	# Ativa o tempo de empurrão
-	knockback_time_left = knockback_duration
-
-	# Aplica o impacto
-	velocity = knockback_velocity
-
-	# Verifica se o personagem morreu
-	if health <= 0:
-
-		die()
-
-
-# ==========================================
-# MORTE DO PERSONAGEM
-# ==========================================
-
-func die() -> void:
-
-	if is_dead:
-		return
-
-	is_dead = true
-
-	# Interrompe o ataque
-	is_attacking = false
-
-	# Desativa a área de ataque
-	attack_area.monitoring = false
-
-	# Interrompe a movimentação
-	velocity = Vector2.ZERO
-
-	# Interrompe o empurrão
-	knockback_time_left = 0.0
-	knockback_velocity = Vector2.ZERO
-
-	# Executa a animação de morte
-	animated_sprite.play(\"death\")
-
-	print(\"O personagem morreu!\")
->>>>>>> Stashed changes
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
@@ -593,13 +356,8 @@ _data = {
 "attack": SubResource("Animation_cedmk")
 }
 
-<<<<<<< Updated upstream
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6lod2"]
 size = Vector2(17, 5)
-=======
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7cg42"]
-size = Vector2(14.5, 5)
->>>>>>> Stashed changes
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
 position = Vector2(403, 152)
@@ -627,16 +385,8 @@ libraries = {
 "": SubResource("AnimationLibrary_l01m2")
 }
 
-<<<<<<< Updated upstream
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(11.5, 14)
 shape = SubResource("RectangleShape2D_6lod2")
-=======
-[node name="AttackArea" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(9.75, 14.5)
-shape = SubResource("RectangleShape2D_7cg42")
->>>>>>> Stashed changes

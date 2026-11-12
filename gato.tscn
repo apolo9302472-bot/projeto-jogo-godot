@@ -77,9 +77,6 @@ _data = {
 
 [node name="gato" type="CharacterBody2D"]
 script = ExtResource("1_nxcyo")
-speed = null
-attack_distance = null
-attack_cooldown = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 9)
