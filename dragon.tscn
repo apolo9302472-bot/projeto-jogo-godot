@@ -15,17 +15,17 @@ script/source = "extends CharacterBody2D
 
 enum State { WALK, TAKEOFF, FLIGHT, SPECIAL, DEAD }
 
-@export var player: Node2D                         # arraste o player aqui (ou use grupo \"player\")
-@export var max_hits: int = 15                     # golpes para morrer
-@export var walk_speed: float = 60.0
-@export var fly_speed: float = 150.0
-@export var takeoff_rise_speed: float = 90.0
-@export var takeoff_distance: float = 350.0        # distância para decolar
-@export var attack_offset_x: float = 110.0         # distância horizontal do player ao atacar
-@export var fly_height: float = 110.0              # altura acima do player ao atacar
+@export var player: Node2D                         
+@export var max_hits: int = 15                     
+@export var walk_speed: float = 70.0
+@export var fly_speed: float = 200.0               
+@export var takeoff_rise_speed: float = 140.0
+@export var takeoff_distance: float = 250.0        
+@export var attack_offset_x: float = 70.0          
+@export var fly_height: float = 70.0               
 @export var special_damage: int = 1
-@export var special_damage_frame: int = 3          # frame do \"special\" em que o fogo causa dano
-@export var special_cooldown: float = 2.0
+@export var special_damage_frame: int = 2          
+@export var special_cooldown: float = 0.4          # Cooldown bem baixo para ele spamar o SPECIAL
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var attack_area: Area2D = $AttackArea
@@ -33,18 +33,26 @@ enum State { WALK, TAKEOFF, FLIGHT, SPECIAL, DEAD }
 
 var state: State = State.WALK
 var health: int
-var facing: int = 1            # 1 = direita, -1 = esquerda
+var facing: int = 1            
 var cooldown_left: float = 0.0
 var damage_done: bool = false
+var special_timer: float = 0.0     
+var rng = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
+	rng.randomize() 
 	health = max_hits
 	add_to_group(\"enemy\")
+	
+	if player == null:
+		player = get_tree().root.find_child(\"Player\", true, false)
 	if player == null:
 		player = get_tree().get_first_node_in_group(\"player\")
-	sprite.animation_finished.connect(_on_animation_finished)
-	sprite.frame_changed.connect(_on_frame_changed)
+		
+	if not sprite.frame_changed.is_connected(_on_frame_changed):
+		sprite.frame_changed.connect(_on_frame_changed)
+		
 	_change_state(State.WALK)
 
 
@@ -54,7 +62,6 @@ func _physics_process(delta: float) -> void:
 
 	cooldown_left = max(cooldown_left - delta, 0.0)
 
-	# Só vira para o player quando NÃO está atacando
 	if state != State.SPECIAL:
 		_update_facing()
 
@@ -63,10 +70,17 @@ func _physics_process(delta: float) -> void:
 			_state_walk()
 		State.TAKEOFF:
 			velocity = Vector2(0, -takeoff_rise_speed)
+			if global_position.y < player.global_position.y - fly_height - 30:
+				_change_state(State.FLIGHT)
 		State.FLIGHT:
 			_state_flight()
 		State.SPECIAL:
 			velocity = Vector2.ZERO
+			
+			# Temporizador de segurança caso a animação falhe
+			special_timer -= delta
+			if special_timer <= 0.0:
+				_terminar_ataque_especial()
 
 	move_and_slide()
 
@@ -74,21 +88,29 @@ func _physics_process(delta: float) -> void:
 # ---------------- ESTADOS ----------------
 
 func _state_walk() -> void:
-	velocity = Vector2(facing * walk_speed, 0)
+	if sprite.animation != \"WALK\":
+		sprite.play(\"WALK\")
+
+	velocity.x = facing * walk_speed
+
 	var dist := absf(player.global_position.x - global_position.x)
 	if dist <= takeoff_distance:
 		_change_state(State.TAKEOFF)
 
 
 func _state_flight() -> void:
-	# Ponto onde o dragão fica para soltar o fogo: na frente do player, acima dele
+	if sprite.animation != \"FLIGHT\":
+		sprite.play(\"FLIGHT\")
+
 	var target := Vector2(
-		player.global_position.x - facing * attack_offset_x,
+		player.global_position.x - (facing * attack_offset_x),
 		player.global_position.y - fly_height
 	)
+	
 	var to_target := target - global_position
 
-	if to_target.length() <= 12.0:
+	# Se chegou no ponto de ataque e o cooldown acabou, dispara o SPECIAL instantaneamente
+	if to_target.length() <= 35.0:
 		velocity = Vector2.ZERO
 		if cooldown_left <= 0.0:
 			_change_state(State.SPECIAL)
@@ -100,14 +122,22 @@ func _change_state(new_state: State) -> void:
 	state = new_state
 	match state:
 		State.WALK:
-			sprite.play(\"walk\")
+			if sprite.sprite_frames.has_animation(\"WALK\"):
+				sprite.play(\"WALK\")
 		State.TAKEOFF:
-			sprite.play(\"takeoff\")
+			if sprite.sprite_frames.has_animation(\"TAKEOFF\"):
+				sprite.play(\"TAKEOFF\")
 		State.FLIGHT:
-			sprite.play(\"flight\")
+			if sprite.sprite_frames.has_animation(\"FLIGHT\"):
+				sprite.play(\"FLIGHT\")
 		State.SPECIAL:
 			damage_done = false
-			sprite.play(\"special\")
+			special_timer = 1.2 
+			# USANDO EXATAMENTE A ANIMAÇÃO \"SPECIAL\" EM MAIÚSCULO:
+			if sprite.sprite_frames.has_animation(\"SPECIAL\"):
+				sprite.play(\"SPECIAL\")
+			else:
+				print(\"AVISO: Animação 'SPECIAL' não encontrada no AnimatedSprite2D!\")
 		State.DEAD:
 			velocity = Vector2.ZERO
 			body_shape.set_deferred(\"disabled\", true)
@@ -124,41 +154,53 @@ func _update_facing() -> void:
 	var dir := player.global_position.x - global_position.x
 	if absf(dir) > 4.0:
 		facing = 1 if dir > 0 else -1
-	sprite.flip_h = facing < 0          # sprite original olha para a direita
-	attack_area.scale.x = facing        # espelha a área do fogo
+	sprite.flip_h = facing < 0          
+	attack_area.scale.x = facing        
 
 
-# ---------------- ANIMAÇÕES ----------------
+# ---------------- CONTROLE DE FIM DE ATAQUE (PRIORIDADE NO SPECIAL) ----------------
 
-func _on_animation_finished() -> void:
-	match state:
-		State.TAKEOFF:
-			_change_state(State.FLIGHT)
-		State.SPECIAL:
-			cooldown_left = special_cooldown
-			_change_state(State.FLIGHT)
-		State.DEAD:
-			queue_free()
+func _terminar_ataque_especial() -> void:
+	if state != State.SPECIAL:
+		return
+		
+	cooldown_left = special_cooldown
+	
+	# Alta prioridade para continuar voando e repetir o SPECIAL rapidamente (85% das chances)
+	var escolha = rng.randi_range(1, 100)
+	
+	if escolha <= 85:
+		_change_state(State.FLIGHT)
+	elif escolha <= 95:
+		_change_state(State.WALK)
+	else:
+		global_position.x += facing * -120.0 # Recuo tático
+		_change_state(State.FLIGHT)
 
 
 func _on_frame_changed() -> void:
-	# Causa dano ao player apenas uma vez, no frame certo do \"special\"
-	if state == State.SPECIAL and not damage_done and sprite.frame >= special_damage_frame:
-		damage_done = true
-		for body in attack_area.get_overlapping_bodies():
-			if body.is_in_group(\"player\") and body.has_method(\"take_damage\"):
-				body.take_damage(special_damage)
+	if state == State.SPECIAL and sprite.animation == \"SPECIAL\":
+		# Causa dano no frame configurado
+		if not damage_done and sprite.frame >= special_damage_frame:
+			damage_done = true
+			for body in attack_area.get_overlapping_bodies():
+				if body.name == \"Player\" or body.is_in_group(\"player\"):
+					if body.has_method(\"take_damage\"):
+						body.take_damage(special_damage, global_position)
+						print(\"Ataque SPECIAL atingiu o Player!\")
+					
+		# Encerra o ataque assim que chega no último frame da animação 'SPECIAL'
+		if sprite.frame >= sprite.sprite_frames.get_frame_count(\"SPECIAL\") - 1:
+			_terminar_ataque_especial()
 
 
 # ---------------- VIDA ----------------
 
-# O player chama esta função cada vez que acerta o dragão
 func take_hit(amount: int = 1) -> void:
 	if state == State.DEAD:
 		return
 	health -= amount
 
-	# efeito de dano
 	sprite.modulate = Color(1, 0.4, 0.4)
 	create_tween().tween_property(sprite, \"modulate\", Color.WHITE, 0.15)
 
@@ -168,30 +210,6 @@ func take_hit(amount: int = 1) -> void:
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l8kif"]
 size = Vector2(192, 43)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0rjwb"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(0, 0, 102, 77)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x1ep0"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(102, 0, 102, 77)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0d4q4"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(204, 0, 102, 77)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_du2g7"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(306, 0, 102, 77)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3m4da"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(408, 0, 102, 77)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ljlxf"]
-atlas = ExtResource("1_3jus0")
-region = Rect2(510, 0, 102, 77)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jyrtc"]
 atlas = ExtResource("8_u6nwr")
@@ -257,31 +275,32 @@ region = Rect2(312, 0, 104, 82)
 atlas = ExtResource("10_spcf2")
 region = Rect2(416, 0, 104, 82)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_0rjwb"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(0, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x1ep0"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(102, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0d4q4"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(204, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_du2g7"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(306, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3m4da"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(408, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljlxf"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(510, 0, 102, 77)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_gh6fs"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0rjwb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x1ep0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_0d4q4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_du2g7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3m4da")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ljlxf")
-}],
-"loop": true,
-"name": &"Walk",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("3_5ma6w")
@@ -299,7 +318,7 @@ animations = [{
 "texture": ExtResource("7_3tyyo")
 }],
 "loop": true,
-"name": &"dead",
+"name": &"DEAD",
 "speed": 5.0
 }, {
 "frames": [{
@@ -319,7 +338,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_thin6")
 }],
 "loop": true,
-"name": &"flight",
+"name": &"FLIGHT",
 "speed": 5.0
 }, {
 "frames": [{
@@ -342,7 +361,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_qg8bp")
 }],
 "loop": true,
-"name": &"special",
+"name": &"SPECIAL",
 "speed": 5.0
 }, {
 "frames": [{
@@ -362,12 +381,36 @@ animations = [{
 "texture": SubResource("AtlasTexture_8jpaf")
 }],
 "loop": true,
-"name": &"take off",
+"name": &"TAKEOFF",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0rjwb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x1ep0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0d4q4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_du2g7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3m4da")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljlxf")
+}],
+"loop": true,
+"name": &"WALK",
 "speed": 5.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hsirw"]
-height = 196.0
+radius = 6.0
+height = 74.0
 
 [node name="Dragon" type="CharacterBody2D"]
 script = SubResource("GDScript_8nn35")
@@ -377,15 +420,13 @@ position = Vector2(34, 31.5)
 shape = SubResource("RectangleShape2D_l8kif")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(31, -13)
-scale = Vector2(2.81373, 2.7987)
+position = Vector2(15.843, 40.862)
+scale = Vector2(2.52225, 1.87798)
 sprite_frames = SubResource("SpriteFrames_gh6fs")
-animation = &"special"
-autoplay = "Walk"
-frame_progress = 0.827728
+animation = &"SPECIAL"
 
 [node name="AttackArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
-position = Vector2(135, 14)
+position = Vector2(126, 72)
 shape = SubResource("CapsuleShape2D_hsirw")
