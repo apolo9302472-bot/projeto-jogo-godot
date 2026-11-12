@@ -1,57 +1,50 @@
 extends CharacterBody2D
 
-@export var speed: float = 100.0
-@export var attack_distance: float = 30.0
-@export var attack_cooldown: float = 1.0
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-var player: Node2D = null
-var can_attack: bool = true
+const KNOCKBACK_FORCE = 300.0
 
-
-func _ready() -> void:
-	player = get_tree().get_first_node_in_group("Player")
+var health := 3
+var isDead := false
+var knockback_velocity := Vector2.ZERO
 
 
-func _physics_process(_delta: float) -> void:
-	if player == null:
+func _physics_process(delta: float) -> void:
+	if isDead:
 		return
 
-	# ==============================
-	# MOVIMENTO ATÉ O PLAYER
-	# ==============================
-	var direction = global_position.direction_to(player.global_position)
-	velocity = direction * speed
+	# GRAVIDADE
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# KNOCKBACK
+	if knockback_velocity.length() > 0:
+		velocity.x = knockback_velocity.x
+		knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, 1000.0 * delta)
+	else:
+		velocity.x = move_toward(velocity.x, 0, 200.0 * delta)
 
 	move_and_slide()
 
-	# ==============================
-	# ATAQUE
-	# ==============================
-	if global_position.distance_to(player.global_position) <= attack_distance:
-		attack_player()
 
-
-# ==========================================
-# ATAQUE DO INIMIGO
-# ==========================================
-func attack_player() -> void:
-	if not can_attack:
+# RECEBER DANO
+func take_damage(amount: int = 1, attacker_position: Vector2 = Vector2.ZERO) -> void:
+	if isDead:
 		return
 
-	can_attack = false
+	health -= amount
+	print("Vida do inimigo: ", health)
 
-	if player.has_method("take_damage"):
-		player.take_damage(global_position)
+	if attacker_position != Vector2.ZERO:
+		var direction = (global_position - attacker_position).normalized()
+		knockback_velocity = direction * KNOCKBACK_FORCE
 
-	# Cooldown do ataque
-	await get_tree().create_timer(attack_cooldown).timeout
-	can_attack = true
+	if health <= 0:
+		die()
 
 
-# ==========================================
-# RECEBER DANO
-# ==========================================
-func take_damage(_attacker_position: Vector2 = Vector2.ZERO) -> void:
-	print("Inimigo foi atingido!")
-	# Remove o inimigo da cena ao receber dano
+# MORTE
+func die() -> void:
+	isDead = true
+	velocity = Vector2.ZERO
 	queue_free()

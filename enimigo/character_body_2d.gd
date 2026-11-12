@@ -40,7 +40,7 @@ func attack_player() -> void:
 	can_attack = false
 
 	if player.has_method("take_damage"):
-		player.take_damage(global_position)
+		player.take_damage(1, global_position)
 
 	await get_tree().create_timer(attack_cooldown).timeout
 	can_attack = true
