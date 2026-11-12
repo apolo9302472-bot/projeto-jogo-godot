@@ -1,0 +1,100 @@
+[gd_scene load_steps=16 format=3 uid="uid://d0ghf4qn7porm"]
+
+[ext_resource type="Texture2D" uid="uid://c1b7bsae3fnxi" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-3.png" id="1_iu8rn"]
+[ext_resource type="Script" path="res://enimigo/gato.gd" id="1_nxcyo"]
+[ext_resource type="Texture2D" uid="uid://bt41qrpxetprd" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-1.png" id="2_dg8r7"]
+[ext_resource type="Texture2D" uid="uid://5dw63eavy8u3" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-1.png" id="2_h3o7q"]
+[ext_resource type="Texture2D" uid="uid://cvncx6urwkedf" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-2.png" id="3_pt5vy"]
+[ext_resource type="Texture2D" uid="uid://hmt7164y1cbk" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-2.png" id="3_xqlsc"]
+[ext_resource type="Texture2D" uid="uid://dqqlkqsnv6usy" path="res://bonecos/Characters/Enemies/hell-gato/Sprites/hell-gato-4.png" id="4_qr86y"]
+[ext_resource type="Texture2D" uid="uid://cahrpntlgd16w" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-3.png" id="4_yrouv"]
+[ext_resource type="Texture2D" uid="uid://c1ndxvx4ra6uc" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-4.png" id="5_ukudx"]
+[ext_resource type="Texture2D" uid="uid://df1otf2l38yox" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-5.png" id="6_75vki"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sbo7c"]
+size = Vector2(43, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2vgw5"]
+atlas = ExtResource("1_iu8rn")
+region = Rect2(0, 0, 96, 53)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l3uhj"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_h3o7q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_xqlsc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_yrouv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ukudx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_75vki")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2vgw5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dg8r7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_pt5vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_iu8rn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_qr86y")
+}],
+"loop": true,
+"name": &"walke",
+"speed": 5.0
+}]
+
+[sub_resource type="Animation" id="Animation_qyma5"]
+resource_name = "new_animation"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g16gm"]
+_data = {
+"new_animation": SubResource("Animation_qyma5")
+}
+
+[node name="gato" type="CharacterBody2D"]
+script = ExtResource("1_nxcyo")
+speed = null
+attack_distance = null
+attack_cooldown = null
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 9)
+shape = SubResource("RectangleShape2D_sbo7c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(13, -7)
+sprite_frames = SubResource("SpriteFrames_l3uhj")
+animation = &"walke"
+autoplay = "walke"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_g16gm")
+}
+autoplay = "new_animation"
