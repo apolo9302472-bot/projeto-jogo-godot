@@ -203,7 +203,6 @@ scale = Vector2(0.45943, 0.514225)
 sprite_frames = SubResource("SpriteFrames_20pon")
 animation = &"idle"
 autoplay = "idle"
-frame_progress = 0.0476635
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]

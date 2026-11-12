@@ -1,0 +1,391 @@
+[gd_scene load_steps=36 format=3 uid="uid://dxg0qpboo0j68"]
+
+[ext_resource type="Texture2D" uid="uid://c8rjcs4jwliad" path="res://bonecos/Characters/Enemies/dragon/Dragon-Pixel-Art-Character-Sprite-Shesssets-Pack2-720x480 (1).png" id="1_3jus0"]
+[ext_resource type="Texture2D" uid="uid://5dw63eavy8u3" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-1.png" id="3_5ma6w"]
+[ext_resource type="Texture2D" uid="uid://hmt7164y1cbk" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-2.png" id="4_7r4o6"]
+[ext_resource type="Texture2D" uid="uid://cahrpntlgd16w" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-3.png" id="5_mtsrq"]
+[ext_resource type="Texture2D" uid="uid://c1ndxvx4ra6uc" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-4.png" id="6_28f5f"]
+[ext_resource type="Texture2D" uid="uid://df1otf2l38yox" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-5.png" id="7_3tyyo"]
+[ext_resource type="Texture2D" uid="uid://croesjrlp8rr2" path="res://bonecos/Characters/Enemies/dragon/Dragon-Pixel-Araaat-Character-Sprite-Sheets-Pack2-720x480 (1).png" id="8_u6nwr"]
+[ext_resource type="Texture2D" uid="uid://cdyp7hsnmn44n" path="res://bonecos/Characters/Enemies/dragon/Dragon-Pixel-Art-Character-Sprite-aaaaaaPack2-720x480 (1).png" id="9_b6acl"]
+[ext_resource type="Texture2D" uid="uid://c6isbpmuwvcv2" path="res://bonecos/Characters/Enemies/dragon/Dragon-Pixel-Art-Character-Sprite-Sheaaaaaets-Pack2-720x480 (1).png" id="10_spcf2"]
+
+[sub_resource type="GDScript" id="GDScript_8nn35"]
+script/source = "extends CharacterBody2D
+
+enum State { WALK, TAKEOFF, FLIGHT, SPECIAL, DEAD }
+
+@export var player: Node2D                         # arraste o player aqui (ou use grupo \"player\")
+@export var max_hits: int = 15                     # golpes para morrer
+@export var walk_speed: float = 60.0
+@export var fly_speed: float = 150.0
+@export var takeoff_rise_speed: float = 90.0
+@export var takeoff_distance: float = 350.0        # distância para decolar
+@export var attack_offset_x: float = 110.0         # distância horizontal do player ao atacar
+@export var fly_height: float = 110.0              # altura acima do player ao atacar
+@export var special_damage: int = 1
+@export var special_damage_frame: int = 3          # frame do \"special\" em que o fogo causa dano
+@export var special_cooldown: float = 2.0
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+@onready var attack_area: Area2D = $AttackArea
+@onready var body_shape: CollisionShape2D = $CollisionShape2D
+
+var state: State = State.WALK
+var health: int
+var facing: int = 1            # 1 = direita, -1 = esquerda
+var cooldown_left: float = 0.0
+var damage_done: bool = false
+
+
+func _ready() -> void:
+	health = max_hits
+	add_to_group(\"enemy\")
+	if player == null:
+		player = get_tree().get_first_node_in_group(\"player\")
+	sprite.animation_finished.connect(_on_animation_finished)
+	sprite.frame_changed.connect(_on_frame_changed)
+	_change_state(State.WALK)
+
+
+func _physics_process(delta: float) -> void:
+	if state == State.DEAD or player == null:
+		return
+
+	cooldown_left = max(cooldown_left - delta, 0.0)
+
+	# Só vira para o player quando NÃO está atacando
+	if state != State.SPECIAL:
+		_update_facing()
+
+	match state:
+		State.WALK:
+			_state_walk()
+		State.TAKEOFF:
+			velocity = Vector2(0, -takeoff_rise_speed)
+		State.FLIGHT:
+			_state_flight()
+		State.SPECIAL:
+			velocity = Vector2.ZERO
+
+	move_and_slide()
+
+
+# ---------------- ESTADOS ----------------
+
+func _state_walk() -> void:
+	velocity = Vector2(facing * walk_speed, 0)
+	var dist := absf(player.global_position.x - global_position.x)
+	if dist <= takeoff_distance:
+		_change_state(State.TAKEOFF)
+
+
+func _state_flight() -> void:
+	# Ponto onde o dragão fica para soltar o fogo: na frente do player, acima dele
+	var target := Vector2(
+		player.global_position.x - facing * attack_offset_x,
+		player.global_position.y - fly_height
+	)
+	var to_target := target - global_position
+
+	if to_target.length() <= 12.0:
+		velocity = Vector2.ZERO
+		if cooldown_left <= 0.0:
+			_change_state(State.SPECIAL)
+	else:
+		velocity = to_target.normalized() * fly_speed
+
+
+func _change_state(new_state: State) -> void:
+	state = new_state
+	match state:
+		State.WALK:
+			sprite.play(\"walk\")
+		State.TAKEOFF:
+			sprite.play(\"takeoff\")
+		State.FLIGHT:
+			sprite.play(\"flight\")
+		State.SPECIAL:
+			damage_done = false
+			sprite.play(\"special\")
+		State.DEAD:
+			velocity = Vector2.ZERO
+			body_shape.set_deferred(\"disabled\", true)
+			attack_area.set_deferred(\"monitoring\", false)
+			if sprite.sprite_frames.has_animation(\"dead\"):
+				sprite.play(\"dead\")
+			else:
+				queue_free()
+
+
+# ---------------- DIREÇÃO (ESQUERDA / DIREITA) ----------------
+
+func _update_facing() -> void:
+	var dir := player.global_position.x - global_position.x
+	if absf(dir) > 4.0:
+		facing = 1 if dir > 0 else -1
+	sprite.flip_h = facing < 0          # sprite original olha para a direita
+	attack_area.scale.x = facing        # espelha a área do fogo
+
+
+# ---------------- ANIMAÇÕES ----------------
+
+func _on_animation_finished() -> void:
+	match state:
+		State.TAKEOFF:
+			_change_state(State.FLIGHT)
+		State.SPECIAL:
+			cooldown_left = special_cooldown
+			_change_state(State.FLIGHT)
+		State.DEAD:
+			queue_free()
+
+
+func _on_frame_changed() -> void:
+	# Causa dano ao player apenas uma vez, no frame certo do \"special\"
+	if state == State.SPECIAL and not damage_done and sprite.frame >= special_damage_frame:
+		damage_done = true
+		for body in attack_area.get_overlapping_bodies():
+			if body.is_in_group(\"player\") and body.has_method(\"take_damage\"):
+				body.take_damage(special_damage)
+
+
+# ---------------- VIDA ----------------
+
+# O player chama esta função cada vez que acerta o dragão
+func take_hit(amount: int = 1) -> void:
+	if state == State.DEAD:
+		return
+	health -= amount
+
+	# efeito de dano
+	sprite.modulate = Color(1, 0.4, 0.4)
+	create_tween().tween_property(sprite, \"modulate\", Color.WHITE, 0.15)
+
+	if health <= 0:
+		_change_state(State.DEAD)
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l8kif"]
+size = Vector2(192, 43)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0rjwb"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(0, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x1ep0"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(102, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0d4q4"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(204, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_du2g7"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(306, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3m4da"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(408, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljlxf"]
+atlas = ExtResource("1_3jus0")
+region = Rect2(510, 0, 102, 77)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jyrtc"]
+atlas = ExtResource("8_u6nwr")
+region = Rect2(0, 0, 100, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eih10"]
+atlas = ExtResource("8_u6nwr")
+region = Rect2(100, 0, 100, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6mwr"]
+atlas = ExtResource("8_u6nwr")
+region = Rect2(200, 0, 100, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7u4wd"]
+atlas = ExtResource("8_u6nwr")
+region = Rect2(300, 0, 100, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_thin6"]
+atlas = ExtResource("8_u6nwr")
+region = Rect2(400, 0, 100, 88)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a3r68"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(0, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0128"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(104, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ubsuj"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(208, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f3mt"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(312, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s60ii"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(416, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qg8bp"]
+atlas = ExtResource("9_b6acl")
+region = Rect2(520, 0, 104, 117)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cew5b"]
+atlas = ExtResource("10_spcf2")
+region = Rect2(0, 0, 104, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kp47r"]
+atlas = ExtResource("10_spcf2")
+region = Rect2(104, 0, 104, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cddx7"]
+atlas = ExtResource("10_spcf2")
+region = Rect2(208, 0, 104, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_10rrr"]
+atlas = ExtResource("10_spcf2")
+region = Rect2(312, 0, 104, 82)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8jpaf"]
+atlas = ExtResource("10_spcf2")
+region = Rect2(416, 0, 104, 82)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gh6fs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0rjwb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x1ep0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0d4q4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_du2g7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3m4da")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljlxf")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_5ma6w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7r4o6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_mtsrq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_28f5f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_3tyyo")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jyrtc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eih10")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6mwr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7u4wd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_thin6")
+}],
+"loop": true,
+"name": &"flight",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a3r68")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0128")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ubsuj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f3mt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s60ii")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qg8bp")
+}],
+"loop": true,
+"name": &"special",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cew5b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kp47r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cddx7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_10rrr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8jpaf")
+}],
+"loop": true,
+"name": &"take off",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_hsirw"]
+height = 196.0
+
+[node name="Dragon" type="CharacterBody2D"]
+script = SubResource("GDScript_8nn35")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(34, 31.5)
+shape = SubResource("RectangleShape2D_l8kif")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(31, -13)
+scale = Vector2(2.81373, 2.7987)
+sprite_frames = SubResource("SpriteFrames_gh6fs")
+animation = &"special"
+autoplay = "Walk"
+frame_progress = 0.827728
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+position = Vector2(135, 14)
+shape = SubResource("CapsuleShape2D_hsirw")
