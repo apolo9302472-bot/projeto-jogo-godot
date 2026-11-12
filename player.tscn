@@ -131,8 +131,8 @@ func _physics_process(delta: float) -> void:
 		if (Input.is_action_just_pressed(\"ui_accept\") or Input.is_action_just_pressed(\"jump\")) and is_on_floor():
 			velocity.y = jump_velocity
 
-		# ATAQUE
-		if (Input.is_action_just_pressed(\"MouseATK\") or Input.is_action_just_pressed(\"attack\")) and not is_attacking:
+		# ATAQUE (Apenas MouseATK)
+		if Input.is_action_just_pressed(\"MouseATK\") and not is_attacking:
 			is_attacking = true
 			already_hit.clear()
 			attack_area.monitoring = true
@@ -374,7 +374,6 @@ scale = Vector2(0.45943, 0.514225)
 sprite_frames = SubResource("SpriteFrames_20pon")
 animation = &"attack"
 autoplay = "idle"
-frame_progress = 0.482145
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]

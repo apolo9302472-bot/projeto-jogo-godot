@@ -101,7 +101,6 @@ shape = SubResource("RectangleShape2D_fe5k0")
 sprite_frames = SubResource("SpriteFrames_0yu6a")
 animation = &"walke"
 autoplay = "walke"
-frame_progress = 0.367098
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
