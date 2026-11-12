@@ -1,12 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://ixq3wrscakg"]
+[gd_scene load_steps=20 format=3 uid="uid://ixq3wrscakg"]
 
-[ext_resource type="Script" path="res://skeletooon.gd" id="1_rs443"]
+[ext_resource type="Script" path="res://skeletooon.gd" id="1_iai5m"]
 [ext_resource type="Texture2D" uid="uid://cvstojb8jvhlo" path="res://bonecos/Characters/Enemies/skeleton/skeleton-rise/skeleton-rise-6.png" id="1_vlvf3"]
 [ext_resource type="Texture2D" uid="uid://cvgl35ys38wpc" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-1.png" id="2_ccmnl"]
+[ext_resource type="Texture2D" uid="uid://5dw63eavy8u3" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-1.png" id="2_vumii"]
+[ext_resource type="Texture2D" uid="uid://hmt7164y1cbk" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-2.png" id="3_l7muj"]
 [ext_resource type="Texture2D" uid="uid://b2hib78qsnwga" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-2.png" id="3_s88xj"]
 [ext_resource type="Texture2D" uid="uid://cb8uvkaopy7nf" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-3.png" id="4_4i006"]
+[ext_resource type="Texture2D" uid="uid://cahrpntlgd16w" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-3.png" id="4_u1jkg"]
 [ext_resource type="Texture2D" uid="uid://b5s6dh5xh1k46" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-4.png" id="5_1qumx"]
+[ext_resource type="Texture2D" uid="uid://c1ndxvx4ra6uc" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-4.png" id="5_blxpe"]
 [ext_resource type="Texture2D" uid="uid://f4dypcy4swtq" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-5.png" id="6_0i7ko"]
+[ext_resource type="Texture2D" uid="uid://df1otf2l38yox" path="res://bonecos/Characters/Enemies/EnemyDeath/Sprites/enemy-death-5.png" id="6_8cxil"]
 [ext_resource type="Texture2D" uid="uid://do30e6n03jqg" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-6.png" id="7_5wtik"]
 [ext_resource type="Texture2D" uid="uid://tmq7tc4modhh" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-7.png" id="8_yc5k3"]
 [ext_resource type="Texture2D" uid="uid://vw6iykw52igm" path="res://bonecos/Characters/Enemies/skeleton/Sprites/Walk/skeleton-8.png" id="9_llhi7"]
@@ -16,6 +21,26 @@ size = Vector2(18, 33)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_0yu6a"]
 animations = [{
+"frames": [{
+"duration": 0.2,
+"texture": ExtResource("2_vumii")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_l7muj")
+}, {
+"duration": 0.6,
+"texture": ExtResource("4_u1jkg")
+}, {
+"duration": 0.7,
+"texture": ExtResource("5_blxpe")
+}, {
+"duration": 0.8,
+"texture": ExtResource("6_8cxil")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("1_vlvf3")
@@ -63,7 +88,10 @@ _data = {
 }
 
 [node name="skeletooon" type="CharacterBody2D"]
-script = ExtResource("1_rs443")
+script = ExtResource("1_iai5m")
+speed = null
+attack_distance = null
+attack_cooldown = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9.5)
@@ -73,7 +101,7 @@ shape = SubResource("RectangleShape2D_fe5k0")
 sprite_frames = SubResource("SpriteFrames_0yu6a")
 animation = &"walke"
 autoplay = "walke"
-frame_progress = 0.367442
+frame_progress = 0.367098
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
 
