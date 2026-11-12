@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dl6m76cdk4v5c"
-path="res://.godot/imported/CemeteryHills_Sheet.png-2c0f191b73c6f6f0713ef376a78aaeca.ctex"
+path="res://.godot/imported/CemeteryHills_Sheet.png-5894f817530272f266f61ebc0716c341.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mapa/CemeteryHills/Pack/CemeteryHills_Sheet.png"
-dest_files=["res://.godot/imported/CemeteryHills_Sheet.png-2c0f191b73c6f6f0713ef376a78aaeca.ctex"]
+source_file="res://mapa/CemeteryHills/CemeteryHills_Sheet.png"
+dest_files=["res://.godot/imported/CemeteryHills_Sheet.png-5894f817530272f266f61ebc0716c341.ctex"]
 
 [params]
 
