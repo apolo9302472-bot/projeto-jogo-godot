@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dkx62bcd62mus"
-path="res://.godot/imported/background.png-09d1857746bbed76f9f21b8d7365d286.ctex"
+path="res://.godot/imported/background.png-f5fe26a2e9dbd081bb331849d53c1dbd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/background.png"
-dest_files=["res://.godot/imported/background.png-09d1857746bbed76f9f21b8d7365d286.ctex"]
+source_file="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/sliced-objects/background.png"
+dest_files=["res://.godot/imported/background.png-f5fe26a2e9dbd081bb331849d53c1dbd.ctex"]
 
 [params]
 
