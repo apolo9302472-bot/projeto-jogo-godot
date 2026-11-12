@@ -365,7 +365,7 @@ _data = {
 size = Vector2(17, 5)
 
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["Player"]]
-position = Vector2(403, 152)
+position = Vector2(404, 141)
 script = SubResource("GDScript_2rgyr")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -377,7 +377,7 @@ autoplay = "idle"
 script = ExtResource("2_mpik7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["Player"]]
-position = Vector2(-3, 16)
+position = Vector2(-4, 0)
 shape = SubResource("RectangleShape2D_c8qqh")
 script = ExtResource("30_rhg7v")
 
