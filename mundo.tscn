@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://bsl81h6lxw2qn"]
+[gd_scene load_steps=19 format=4 uid="uid://bsl81h6lxw2qn"]
 
 [ext_resource type="Texture2D" uid="uid://dkx62bcd62mus" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/sliced-objects/background.png" id="1_1fw8h"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="2_0kh7d"]
@@ -7,7 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://llwqd32ibuyt" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/objects.png" id="3_ywitr"]
 [ext_resource type="Texture2D" uid="uid://biv7ypaopp3og" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/graveyard.png" id="4_pjml8"]
 [ext_resource type="Texture2D" uid="uid://dl6m76cdk4v5c" path="res://mapa/CemeteryHills/CemeteryHills_Sheet.png" id="4_tfblt"]
-[ext_resource type="PackedScene" uid="uid://dxg0qpboo0j68" path="res://dragon.tscn" id="8_mugh0"]
+[ext_resource type="Script" path="res://mapa/spawnpoint/spawnpoint/spawnpoint.gd" id="8_pt42b"]
+[ext_resource type="PackedScene" uid="uid://ixq3wrscakg" path="res://skeletooon.tscn" id="10_myg5d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3p46f"]
 texture = ExtResource("3_rpn2g")
@@ -1394,6 +1395,8 @@ sources/0 = SubResource("TileSetAtlasSource_prtcq")
 sources/1 = SubResource("TileSetAtlasSource_srsq1")
 sources/2 = SubResource("TileSetAtlasSource_2iqvi")
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_km8qs"]
+
 [node name="mundo" type="Node2D"]
 position = Vector2(-7, 7)
 
@@ -1434,8 +1437,19 @@ tile_map_data = PackedByteArray("AAAOAP7/AAAhAAgAAAAOAP//AAAhAAkAAAAOAAAAAAAhAAo
 tile_set = SubResource("TileSet_bdgd0")
 y_sort_origin = -2
 
-[node name="Dragon" parent="." instance=ExtResource("8_mugh0")]
-position = Vector2(21, -31)
-
 [node name="Player" parent="." instance=ExtResource("2_0kh7d")]
 position = Vector2(224, -19)
+
+[node name="spawnpoint" type="Node2D" parent="."]
+script = ExtResource("8_pt42b")
+inimigo = ExtResource("10_myg5d")
+
+[node name="Marker2D" type="Marker2D" parent="spawnpoint"]
+
+[node name="Area2D" type="Area2D" parent="spawnpoint"]
+position = Vector2(414, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnpoint/Area2D"]
+position = Vector2(-1, 5)
+shape = SubResource("CircleShape2D_km8qs")
+one_way_collision_margin = 10.0
