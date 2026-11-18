@@ -32,7 +32,8 @@
 [ext_resource type="Script" path="res://collision_shape_2d.gd" id="30_rhg7v"]
 
 [sub_resource type="GDScript" id="GDScript_2rgyr"]
-script/source = "extends CharacterBody2D
+script/source = "
+extends CharacterBody2D
 
 # ==========================================
 # CONFIGURAÇÕES DO PERSONAGEM
@@ -41,18 +42,22 @@ script/source = "extends CharacterBody2D
 @export var speed: float = 200.0
 @export var jump_velocity: float = -300.0
 
-# Sistema de vida
 @export var max_health: int = 3
 var health: int
 
-# Gravidade
 var gravity: float = float(
 	ProjectSettings.get_setting(\"physics/2d/default_gravity\")
 )
 
-# Direção do personagem
 var facing_direction: float = 1.0
 
+# ==========================================
+# CONFIGURAÇÕES DO PULO
+# ==========================================
+
+@export var jump_horizontal_speed: float = 200.0
+
+var is_jumping: bool = false
 
 # ==========================================
 # CONFIGURAÇÕES DO ATAQUE
@@ -65,9 +70,8 @@ var cooldown_time_left: float = 0.0
 var is_attacking: bool = false
 var already_hit: Array = []
 
-
 # ==========================================
-# CONFIGURAÇÕES DO EMPURRÃO (KNOCKBACK)
+# CONFIGURAÇÕES DO KNOCKBACK
 # ==========================================
 
 @export var knockback_force: float = 300.0
@@ -76,16 +80,14 @@ var already_hit: Array = []
 var knockback_velocity: Vector2 = Vector2.ZERO
 var knockback_time_left: float = 0.0
 
-
 # ==========================================
-# ESTADOS DO PERSONAGEM
+# ESTADOS
 # ==========================================
 
 var is_dead: bool = false
 
-
 # ==========================================
-# REFERÊNCIAS DOS NÓS
+# REFERÊNCIAS
 # ==========================================
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
@@ -93,25 +95,22 @@ var is_dead: bool = false
 
 
 func _ready() -> void:
-	# Inicializa a vida
 	health = max_health
 
-	# Desativa a área de ataque
 	attack_area.monitoring = false
 
-	# Conecta os sinais
 	attack_area.body_entered.connect(_on_attack_body_entered)
 	animated_sprite.animation_finished.connect(_on_animação_animation_finished)
 
-	# Inicia a animação padrão
 	animated_sprite.play(\"idle\")
 
 
 # ==========================================
-# MOVIMENTAÇÃO PRINCIPAL
+# MOVIMENTAÇÃO
 # ==========================================
 
 func _physics_process(delta: float) -> void:
+
 	if is_dead:
 		return
 
@@ -119,43 +118,92 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 
-	# MOVIMENTAÇÃO HORIZONTAL (EIXO X)
+	# DIREÇÃO
 	var direction := Input.get_axis(\"move_left\", \"move_right\")
 
-	# KNOCKBACK (EMPURRÃO)
-	if knockback_time_left > 0.0:
+	# COOLDOWN DO ATAQUE
+	if cooldown_time_left > 0:
+		cooldown_time_left -= delta
+
+	# KNOCKBACK
+	if knockback_time_left > 0:
 		velocity.x = knockback_velocity.x
 		knockback_time_left = maxf(knockback_time_left - delta, 0.0)
-	else:
-		# PULO
-		if (Input.is_action_just_pressed(\"ui_accept\") or Input.is_action_just_pressed(\"jump\")) and is_on_floor():
-			velocity.y = jump_velocity
 
-		# ATAQUE (Apenas MouseATK)
-		if Input.is_action_just_pressed(\"MouseATK\") and not is_attacking:
+	else:
+
+		# ==================================
+		# PULO
+		# ==================================
+
+		if (Input.is_action_just_pressed(\"jump\") or Input.is_action_just_pressed(\"ui_accept\")) and is_on_floor():
+
+			velocity.y = jump_velocity
+			is_jumping = true
+
+			animated_sprite.play(\"jump\")
+
+		# ==================================
+		# ATAQUE
+		# ==================================
+
+		if Input.is_action_just_pressed(\"MouseATK\") and not is_attacking and cooldown_time_left <= 0:
+
 			is_attacking = true
+			cooldown_time_left = attack_cooldown
+
 			already_hit.clear()
+
 			attack_area.monitoring = true
+
 			animated_sprite.play(\"attack\")
 
-		# MOVIMENTO E DIREÇÃO
-		if direction != 0 and not is_attacking:
-			velocity.x = direction * speed
-			animated_sprite.play(\"walk\")
+		# ==================================
+		# MOVIMENTAÇÃO HORIZONTAL
+		# ==================================
 
-			# Virar personagem e hitbox
+		if is_attacking:
+			velocity.x = move_toward(velocity.x, 0, speed)
+
+		elif direction != 0:
+
+			velocity.x = direction * speed
+
 			if direction < 0:
+				facing_direction = -1
 				animated_sprite.flip_h = true
 				attack_area.position.x = -abs(attack_area.position.x)
-			elif direction > 0:
+
+			else:
+				facing_direction = 1
 				animated_sprite.flip_h = false
 				attack_area.position.x = abs(attack_area.position.x)
+
 		else:
-			if not is_attacking:
-				velocity.x = move_toward(velocity.x, 0, speed)
+			velocity.x = move_toward(velocity.x, 0, speed)
+
+	# ==================================
+	# ANIMAÇÕES
+	# ==================================
+
+	if not is_attacking and knockback_time_left <= 0:
+
+		if not is_on_floor():
+			if animated_sprite.animation != \"jump\":
+				animated_sprite.play(\"jump\")
+
+		elif direction != 0:
+			if animated_sprite.animation != \"walk\":
+				animated_sprite.play(\"walk\")
+
+		else:
+			if animated_sprite.animation != \"idle\":
 				animated_sprite.play(\"idle\")
 
-	# Executa a movimentação do Godot
+	# FINAL DO PULO
+	if is_on_floor():
+		is_jumping = false
+
 	move_and_slide()
 
 
@@ -164,16 +212,21 @@ func _physics_process(delta: float) -> void:
 # ==========================================
 
 func take_damage(amount: int = 1, attacker_position: Vector2 = Vector2.ZERO) -> void:
+
 	if is_dead:
 		return
 
 	health -= amount
+
 	print(\"Vida do personagem: \", health)
 
 	if attacker_position != Vector2.ZERO:
+
 		var direction = (global_position - attacker_position).normalized()
+
 		knockback_velocity = direction * knockback_force
 		knockback_time_left = knockback_duration
+
 		velocity = knockback_velocity
 
 	if health <= 0:
@@ -181,21 +234,26 @@ func take_damage(amount: int = 1, attacker_position: Vector2 = Vector2.ZERO) -> 
 
 
 # ==========================================
-# MORTE DO PERSONAGEM
+# MORTE
 # ==========================================
 
 func die() -> void:
+
 	if is_dead:
 		return
 
 	is_dead = true
 	is_attacking = false
+
 	attack_area.monitoring = false
+
 	velocity = Vector2.ZERO
+
 	knockback_time_left = 0.0
 	knockback_velocity = Vector2.ZERO
-	
+
 	animated_sprite.play(\"death\")
+
 	print(\"O personagem morreu!\")
 
 
@@ -204,11 +262,14 @@ func die() -> void:
 # ==========================================
 
 func _on_attack_body_entered(body: Node2D) -> void:
+
 	if body == self or body in already_hit:
 		return
 
 	if body.has_method(\"take_damage\"):
+
 		already_hit.append(body)
+
 		body.take_damage(ATTACK_DAMAGE, global_position)
 
 
@@ -217,15 +278,23 @@ func _on_attack_body_entered(body: Node2D) -> void:
 # ==========================================
 
 func _on_animação_animation_finished() -> void:
+
 	if animated_sprite.animation == \"attack\":
+
 		is_attacking = false
+
 		attack_area.monitoring = false
+
 		already_hit.clear()
-		animated_sprite.play(\"idle\")
+
+		if is_on_floor():
+			animated_sprite.play(\"idle\")
+		else:
+			animated_sprite.play(\"jump\")
 
 	elif animated_sprite.animation == \"death\":
+
 		velocity = Vector2.ZERO
-		# queue_free() # Descomente se quiser remover o nó da cena após morrer
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_20pon"]
@@ -321,6 +390,12 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": ExtResource("22_4xrqw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_f5t6b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_ry6kt")
 }],
 "loop": true,
 "name": &"jump",
