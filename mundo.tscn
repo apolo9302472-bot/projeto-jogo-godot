@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://bsl81h6lxw2qn"]
+[gd_scene load_steps=18 format=4 uid="uid://bsl81h6lxw2qn"]
 
 [ext_resource type="Texture2D" uid="uid://dkx62bcd62mus" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/sliced-objects/background.png" id="1_1fw8h"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="2_0kh7d"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://biv7ypaopp3og" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/graveyard.png" id="4_pjml8"]
 [ext_resource type="Texture2D" uid="uid://dl6m76cdk4v5c" path="res://mapa/CemeteryHills/CemeteryHills_Sheet.png" id="4_tfblt"]
 [ext_resource type="PackedScene" uid="uid://dxg0qpboo0j68" path="res://dragon.tscn" id="8_mugh0"]
+[ext_resource type="PackedScene" uid="uid://dsx8wapts71qy" path="res://character_body_2d.tscn" id="9_xmxmv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3p46f"]
 texture = ExtResource("3_rpn2g")
@@ -1439,3 +1440,6 @@ position = Vector2(21, -31)
 
 [node name="Player" parent="." instance=ExtResource("2_0kh7d")]
 position = Vector2(224, -19)
+
+[node name="ghost" parent="." instance=ExtResource("9_xmxmv")]
+position = Vector2(386, -6)
