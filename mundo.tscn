@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://bsl81h6lxw2qn"]
+[gd_scene load_steps=20 format=4 uid="uid://bsl81h6lxw2qn"]
 
 [ext_resource type="Texture2D" uid="uid://dkx62bcd62mus" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/sliced-objects/background.png" id="1_1fw8h"]
 [ext_resource type="PackedScene" uid="uid://t7vd03vrhad5" path="res://player.tscn" id="2_0kh7d"]
@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://llwqd32ibuyt" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/objects.png" id="3_ywitr"]
 [ext_resource type="Texture2D" uid="uid://biv7ypaopp3og" path="res://mapa/gothicvania-cemetery-files/gothicvania-cemetery-files/Assets/Environment/graveyard.png" id="4_pjml8"]
 [ext_resource type="Texture2D" uid="uid://dl6m76cdk4v5c" path="res://mapa/CemeteryHills/CemeteryHills_Sheet.png" id="4_tfblt"]
-[ext_resource type="Script" path="res://mapa/spawnpoint/spawnpoint/spawnpoint.gd" id="8_pt42b"]
+[ext_resource type="Script" path="res://spawn/spawnarea.gd" id="8_sv7mu"]
 [ext_resource type="PackedScene" uid="uid://ixq3wrscakg" path="res://skeletooon.tscn" id="10_myg5d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3p46f"]
@@ -1395,7 +1395,11 @@ sources/0 = SubResource("TileSetAtlasSource_prtcq")
 sources/1 = SubResource("TileSetAtlasSource_srsq1")
 sources/2 = SubResource("TileSetAtlasSource_2iqvi")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_km8qs"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ooqw3"]
+size = Vector2(63.75, 88.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7fn16"]
+size = Vector2(118.5, 92)
 
 [node name="mundo" type="Node2D"]
 position = Vector2(-7, 7)
@@ -1440,16 +1444,47 @@ y_sort_origin = -2
 [node name="Player" parent="." instance=ExtResource("2_0kh7d")]
 position = Vector2(224, -19)
 
-[node name="spawnpoint" type="Node2D" parent="."]
-script = ExtResource("8_pt42b")
+[node name="spawnarea" type="Node2D" parent="."]
+script = ExtResource("8_sv7mu")
+inimigo = ExtResource("10_myg5d")
+intervalo_spawn = 1000.0
+
+[node name="Marker2D" type="Marker2D" parent="spawnarea"]
+position = Vector2(551, -13)
+
+[node name="StartArea" type="Area2D" parent="spawnarea"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnarea/StartArea"]
+position = Vector2(320.25, -17.75)
+shape = SubResource("RectangleShape2D_ooqw3")
+
+[node name="EndArea" type="Area2D" parent="spawnarea"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnarea/EndArea"]
+position = Vector2(2143, -29)
+shape = SubResource("RectangleShape2D_7fn16")
+
+[node name="Timer" type="Timer" parent="spawnarea"]
+wait_time = 3.0
+
+[node name="spawnarea2" type="Node2D" parent="."]
+script = ExtResource("8_sv7mu")
 inimigo = ExtResource("10_myg5d")
 
-[node name="Marker2D" type="Marker2D" parent="spawnpoint"]
+[node name="Marker2D" type="Marker2D" parent="spawnarea2"]
+position = Vector2(551, -13)
 
-[node name="Area2D" type="Area2D" parent="spawnpoint"]
-position = Vector2(414, -4)
+[node name="StartArea" type="Area2D" parent="spawnarea2"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnpoint/Area2D"]
-position = Vector2(-1, 5)
-shape = SubResource("CircleShape2D_km8qs")
-one_way_collision_margin = 10.0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnarea2/StartArea"]
+position = Vector2(2915.13, -69.625)
+shape = SubResource("RectangleShape2D_ooqw3")
+
+[node name="EndArea" type="Area2D" parent="spawnarea2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="spawnarea2/EndArea"]
+position = Vector2(3733, -69)
+shape = SubResource("RectangleShape2D_7fn16")
+
+[node name="Timer" type="Timer" parent="spawnarea2"]
+wait_time = 2.612
